@@ -6,8 +6,12 @@ import com.studmed.soporte.interfaces.rest.resource.CreateSoporteResource;
 public class CreateSoporteCommandFromResourceAssembler {
     public static CreateSoporteCommand toCommandFromResource(CreateSoporteResource resource) {
         return new CreateSoporteCommand(
-                resource.origin(),
-                resource.destination(),
-                resource.date());
+                resource.ticketCreationTime(),
+                resource.ticketSentTitle(),
+                resource.ticketSentMessage(),
+                resource.ticketState(),
+                resource.ticketResponseTitle(),
+                resource.ticketResponseMessage(),
+                resource.ticketResponseTime());
     }
 }

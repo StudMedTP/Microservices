@@ -7,8 +7,12 @@ public class UpdateSoporteCommandFromResourceAssembler {
     public static UpdateSoporteCommand toCommandFromResource(Long id, UpdateSoporteResource resource) {
         return new UpdateSoporteCommand(
                 id,
-                resource.origin(),
-                resource.destination(),
-                resource.date());
+                resource.ticketCreationTime(),
+                resource.ticketSentTitle(),
+                resource.ticketSentMessage(),
+                resource.ticketState(),
+                resource.ticketResponseTitle(),
+                resource.ticketResponseMessage(),
+                resource.ticketResponseTime());
     }
 }

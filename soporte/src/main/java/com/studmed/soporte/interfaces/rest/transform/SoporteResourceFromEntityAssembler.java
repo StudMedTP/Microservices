@@ -7,8 +7,12 @@ public class SoporteResourceFromEntityAssembler {
     public static SoporteResource toResourceFromEntity(Soporte entity) {
         return new SoporteResource(
                 entity.getId(),
-                entity.getOrigin(),
-                entity.getDestination(),
-                entity.getDate());
+                entity.getTicketCreationTime(),
+                entity.getTicketSentTitle(),
+                entity.getTicketSentMessage(),
+                entity.getTicketState(),
+                entity.getTicketResponseTitle(),
+                entity.getTicketResponseMessage(),
+                entity.getTicketResponseTime());
     }
 }
