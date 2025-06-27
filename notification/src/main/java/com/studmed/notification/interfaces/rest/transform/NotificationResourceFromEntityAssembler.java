@@ -10,9 +10,10 @@ public class NotificationResourceFromEntityAssembler {
 
         return new NotificationResource(
                 entity.getId(),
-                entity.getProduct(),
-                entity.getProductQuantity(),
-                entity.getCartTotal());
+                entity.getTitle(),
+                entity.getMessage(),
+                entity.getTime(),
+                entity.getNotificationType());
 
     }
 

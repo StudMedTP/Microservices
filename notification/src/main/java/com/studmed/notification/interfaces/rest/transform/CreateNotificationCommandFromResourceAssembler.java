@@ -10,9 +10,10 @@ public class CreateNotificationCommandFromResourceAssembler {
     public static CreateNotificationCommand toCommandFromResource (CreateNotificationResource resource) {
 
         return new CreateNotificationCommand(
-                resource.product(),
-                resource.productQuantity(),
-                resource.cartTotal());
+                resource.title(),
+                resource.message(),
+                resource.time(),
+                resource.notificationType());
     }
 
 }

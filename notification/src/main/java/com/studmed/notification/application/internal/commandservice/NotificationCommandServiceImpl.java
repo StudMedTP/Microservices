@@ -20,7 +20,7 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
 
     @Override
     public Long handle (CreateNotificationCommand command) {
-        if (notificationRepository.existsByProduct(command.product())){
+        if (notificationRepository.existsByTitle(command.title())){
             throw new IllegalArgumentException("Notification already exists");
         }
 
@@ -35,8 +35,8 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
 
     @Override
     public Optional<Notification> handle(UpdateNotificationCommand command) {
-        if (notificationRepository.existsByProductAndIdIsNot(command.product(), command.id())){
-            throw new IllegalArgumentException("Notification with same product already exists");
+        if (notificationRepository.existsByTitleAndIdIsNot(command.title(), command.id())){
+            throw new IllegalArgumentException("Notification with same title already exists");
         }
 
         var result = notificationRepository.findById(command.id());
@@ -47,9 +47,11 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
         var notificationToUpdate = result.get();
         try {
             var updatedNotification = notificationRepository.save(notificationToUpdate.updateNotification(
-                    command.product(),
-                    command.productQuantity(),
-                    command.cartTotal()));
+                    command.title(),
+                    command.message(),
+                    command.time(),
+                    command.notificationType()
+            ));
             return Optional.of(updatedNotification);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while saving notification" + e.getMessage());

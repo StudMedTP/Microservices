@@ -1,7 +1,8 @@
 package com.studmed.notification.domain.model.commands;
 
-public record CreateNotificationCommand(String product,
-                                        String productQuantity,
-                                        String cartTotal) {
+public record CreateNotificationCommand(String title,
+                                        String message,
+                                        String time,
+                                        String notificationType) {
 
 }

@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    Optional<Notification> findByProduct(String product);
-    Boolean existsByProduct(String product);
-    Boolean existsByProductAndIdIsNot(String product, Long id);
+    Optional<Notification> findByTitle(String title);
+    Boolean existsByTitle(String title);
+    Boolean existsByTitleAndIdIsNot(String title, Long id);
 
 }
