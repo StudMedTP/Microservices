@@ -5,7 +5,7 @@ diseñada para gestionar diversos aspectos de un sistema de asistencia de estudi
 Este repositorio contiene todos los microservicios que forman parte del proyecto.
 
 
-## Team EvolveTravel
+## Team StudMed
 * Alessandro Alex Vega Paico - u201910225
 * Tomas Ortiz Fajardo - U201910146
 
