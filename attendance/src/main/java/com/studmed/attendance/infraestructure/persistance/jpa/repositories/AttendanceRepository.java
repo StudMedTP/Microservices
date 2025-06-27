@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
-    Optional<Attendance> findByOrderNumber(Double orderNumber);
-    Boolean existsByOrderNumber(Double orderNumber);
-    Boolean existsByOrderNumberAndIdIsNot(Double orderNumber, Long id);
+    Optional<Attendance> findByVerificationToken(String verificationToken);
+    Boolean existsByVerificationToken(String verificationToken);
+    Boolean existsByVerificationTokenAndIdIsNot(String verificationToken, Long id);
 }

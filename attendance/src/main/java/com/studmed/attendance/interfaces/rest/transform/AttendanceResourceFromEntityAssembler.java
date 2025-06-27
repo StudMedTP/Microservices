@@ -7,12 +7,11 @@ public class AttendanceResourceFromEntityAssembler {
     public static AttendanceResource toResourceFromEntity(Attendance entity) {
         return new AttendanceResource(
                 entity.getId(),
-                entity.getOrderNumber(),
-                entity.getOrderDate(),
-                entity.getWaitingTime(),
-                entity.getTotalPrice(),
-                entity.getOrderStatus(),
-                entity.getPaymentMethod(),
-                entity.getPaymentAmount());
+                entity.getAttendaceDate(),
+                entity.getRegistrationTime(),
+                entity.getCourseName(),
+                entity.getAttendaceState(),
+                entity.getVerificationToken(),
+                entity.getCoordinates());
     }
 }

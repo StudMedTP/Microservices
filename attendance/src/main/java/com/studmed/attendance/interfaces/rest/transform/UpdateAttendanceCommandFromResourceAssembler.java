@@ -7,12 +7,11 @@ public class UpdateAttendanceCommandFromResourceAssembler {
     public static UpdateAttendanceCommand toCommandFromResource(Long id, UpdateAttendanceResource resource){
         return new UpdateAttendanceCommand(
                 id,
-                resource.orderNumber(),
-                resource.orderDate(),
-                resource.waitingTime(),
-                resource.totalPrice(),
-                resource.orderStatus(),
-                resource.paymentMethod(),
-                resource.paymentAmount());
+                resource.attendaceDate(),
+                resource.registrationTime(),
+                resource.courseName(),
+                resource.attendaceState(),
+                resource.verificationToken(),
+                resource.coordinates());
     }
 }
