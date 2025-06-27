@@ -7,8 +7,9 @@ public class UpdateNotificationCommandFromResourceAssembler {
     public static UpdateNotificationCommand toCommandFromResource(Long id, UpdateNotificationResource resource) {
         return new UpdateNotificationCommand(
                 id,
-                resource.product(),
-                resource.productQuantity(),
-                resource.cartTotal());
+                resource.title(),
+                resource.message(),
+                resource.time(),
+                resource.notificationType());
     }
 }

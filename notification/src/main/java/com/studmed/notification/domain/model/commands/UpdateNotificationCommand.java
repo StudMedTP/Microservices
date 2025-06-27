@@ -1,8 +1,9 @@
 package com.studmed.notification.domain.model.commands;
 
 public record UpdateNotificationCommand(Long id,
-                                        String product,
-                                        String productQuantity,
-                                        String cartTotal){
+                                        String title,
+                                        String message,
+                                        String time,
+                                        String notificationType){
 
 }

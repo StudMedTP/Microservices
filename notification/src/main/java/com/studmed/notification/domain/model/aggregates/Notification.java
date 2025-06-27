@@ -20,44 +20,49 @@ public class Notification extends AbstractAggregateRoot<Notification> {
     private Long id;
 
     @Getter
-    private String product;
+    private String title;
 
     @Getter
-    private String productQuantity;
+    private String message;
 
     @Getter
-    private String cartTotal;
+    private String time;
+
+    @Getter
+    private String notificationType;
 
     public Notification() {
 
-        this.product = Strings.EMPTY;
-        this.productQuantity = Strings.EMPTY;
-        this.cartTotal = Strings.EMPTY;
-
+        this.title = Strings.EMPTY;
+        this.message = Strings.EMPTY;
+        this.time = Strings.EMPTY;
+        this.notificationType = Strings.EMPTY;
     }
 
-    public Notification(String product, String productQuantity, String cartTotal) {
+    public Notification(String title, String message, String time, String notificationType) {
 
-        this.product = product;
-        this.productQuantity = productQuantity;
-        this.cartTotal = cartTotal;
+        this.title = title;
+        this.message = message;
+        this.time = time;
+        this.notificationType = notificationType;
 
     }
 
     public Notification(CreateNotificationCommand command){
 
         this();
-        this.product = command.product();
-        this.productQuantity = command.productQuantity();
-        this.cartTotal = command.cartTotal();
-
+        this.title = command.title();
+        this.message = command.message();
+        this.time = command.time();
+        this.notificationType = command.notificationType();
     }
 
-    public Notification updateNotification(String product, String productQuantity, String cartTotal) {
+    public Notification updateNotification(String product, String productQuantity, String cartTotal, String notificationType) {
 
-        this.product = product;
-        this.productQuantity = productQuantity;
-        this.cartTotal = cartTotal;
+        this.title = product;
+        this.message = productQuantity;
+        this.time = cartTotal;
+        this.notificationType = notificationType;
         return this;
 
     }
