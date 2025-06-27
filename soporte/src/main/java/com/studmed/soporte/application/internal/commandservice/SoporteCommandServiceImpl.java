@@ -20,7 +20,7 @@ public class SoporteCommandServiceImpl implements SoporteCommandService {
 
     @Override
     public Long handle (CreateSoporteCommand command) {
-        if(soporteRepository.existsByDate(command.date())){
+        if(soporteRepository.existsByTicketSentTitle(command.ticketSentTitle())){
             throw new IllegalArgumentException("Soporte already exists");
         }
 
@@ -35,7 +35,7 @@ public class SoporteCommandServiceImpl implements SoporteCommandService {
 
     @Override
     public Optional<Soporte> handle (UpdateSoporteCommand command) {
-        if (soporteRepository.existsByDateAndIdIsNot(command.date(), command.id())){
+        if (soporteRepository.existsByTicketSentTitleAndIdIsNot(command.ticketSentTitle(), command.id())){
             throw new IllegalArgumentException("Soporte with same date already exists");
         }
 
@@ -47,9 +47,13 @@ public class SoporteCommandServiceImpl implements SoporteCommandService {
         var soporteToUpdate = result.get();
         try {
             var updatedSoporte = soporteRepository.save(soporteToUpdate.updateSoporte(
-                    command.origin(),
-                    command.destination(),
-                    command.date()));
+                    command.ticketCreationTime(),
+                    command.ticketSentMessage(),
+                    command.ticketSentMessage(),
+                    command.ticketState(),
+                    command.ticketResponseTitle(),
+                    command.ticketResponseMessage(),
+                    command.ticketResponseTime()));
             return Optional.of(updatedSoporte);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while saving soporte" + e.getMessage());
