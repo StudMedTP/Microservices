@@ -7,11 +7,14 @@ public class UpdateEvaluationCommandFromResourceAssembler {
     public static UpdateEvaluationCommand toCommandFromResource(Long id, UpdateEvaluationResource resource) {
         return new UpdateEvaluationCommand(
                 id,
-                resource.name(),
+                resource.title(),
+                resource.hospitalName(),
+                resource.courseName(),
                 resource.description(),
-                resource.price(),
-                resource.imageUrl(),
-                resource.rating(),
-                resource.category());
+                resource.startDate(),
+                resource.evaluationState(),
+                resource.feedback(),
+                resource.teacherName(),
+                resource.evaluationGrade());
     }
 }

@@ -1,10 +1,13 @@
 package com.studmed.evaluation.domain.model.commands;
 
 public record UpdateEvaluationCommand(Long id,
-                                      String name,
+                                      String title,
+                                      String hospitalName,
+                                      String courseName,
                                       String description,
-                                      Double price,
-                                      String imageUrl,
-                                      Double rating,
-                                      String category) {
+                                      String startDate,
+                                      String evaluationState,
+                                      String feedback,
+                                      String teacherName,
+                                      String evaluationGrade) {
 }

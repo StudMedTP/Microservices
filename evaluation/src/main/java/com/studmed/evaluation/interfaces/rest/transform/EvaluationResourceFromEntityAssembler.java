@@ -7,11 +7,14 @@ public class EvaluationResourceFromEntityAssembler {
     public static EvaluationResource toResourceFromEntity(Evaluation entity ) {
         return new EvaluationResource(
                 entity.getId(),
-                entity.getName(),
+                entity.getTitle(),
+                entity.getHospitalName(),
+                entity.getCourseName(),
                 entity.getDescription(),
-                entity.getPrice(),
-                entity.getImageUrl(),
-                entity.getRating(),
-                entity.getCategory());
+                entity.getStartDate(),
+                entity.getEvaluationState(),
+                entity.getFeedback(),
+                entity.getTeacherName(),
+                entity.getEvaluationGrade());
     }
 }
