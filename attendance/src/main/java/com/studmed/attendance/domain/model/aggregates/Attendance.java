@@ -16,62 +16,58 @@ public class Attendance extends AbstractAggregateRoot {
     private Long id;
 
     @Getter
-    private Double orderNumber;
+    private String attendaceDate;
 
     @Getter
-    private String orderDate;
+    private String registrationTime;
 
     @Getter
-    private String waitingTime;
+    private String courseName;
 
     @Getter
-    private Double totalPrice;
+    private String attendaceState;
 
     @Getter
-    private String orderStatus;
+    private String verificationToken;
 
     @Getter
-    private String paymentMethod;
-
-    @Getter
-    private Double paymentAmount;
+    private String coordinates;
 
     public Attendance(){
-        this.orderDate = Strings.EMPTY;
-        this.waitingTime = Strings.EMPTY;
-        this.orderStatus= Strings.EMPTY;
-        this.paymentMethod= Strings.EMPTY;
+        this.attendaceDate = Strings.EMPTY;
+        this.registrationTime = Strings.EMPTY;
+        this.courseName = Strings.EMPTY;
+        this.attendaceState = Strings.EMPTY;
+        this.verificationToken = Strings.EMPTY;
+        this.coordinates = Strings.EMPTY;
     }
 
-    public Attendance(Double orderNumber, String orderDate, String waitingTime, Double totalPrice, String orderStatus, String paymentMethod, Double paymentAmount) {
-        this.orderNumber = orderNumber;
-        this.orderDate = orderDate;
-        this.waitingTime = waitingTime;
-        this.totalPrice = totalPrice;
-        this.orderStatus = orderStatus;
-        this.paymentMethod = paymentMethod;
-        this.paymentAmount = paymentAmount;
+    public Attendance(String attendaceDate, String registrationTime, String courseName, String attendaceState, String verificationToken, String coordinates) {
+        this.attendaceDate = attendaceDate;
+        this.registrationTime = registrationTime;
+        this.courseName = courseName;
+        this.attendaceState = attendaceState;
+        this.verificationToken = verificationToken;
+        this.coordinates = coordinates;
     }
 
     public Attendance(CreateAttendanceCommand command){
         this();
-        this.orderNumber = command.orderNumber();
-        this.orderDate = command.orderDate();
-        this.waitingTime = command.waitingTime();
-        this.totalPrice = command.totalPrice();
-        this.orderStatus = command.orderStatus();
-        this.paymentMethod = command.paymentMethod();
-        this.paymentAmount = command.paymentAmount();
+        this.attendaceDate = command.attendaceDate();
+        this.registrationTime = command.registrationTime();
+        this.courseName = command.courseName();
+        this.attendaceState = command.attendaceState();
+        this.verificationToken = command.verificationToken();
+        this.coordinates = command.coordinates();
     }
 
-    public Attendance updateAttendance(Double orderNumber, String orderDate, String waitingTime, Double totalPrice, String orderStatus, String paymentMethod, Double paymentAmount){
-        this.orderNumber = orderNumber;
-        this.orderDate = orderDate;
-        this.waitingTime = waitingTime;
-        this.totalPrice = totalPrice;
-        this.orderStatus = orderStatus;
-        this.paymentMethod = paymentMethod;
-        this.paymentAmount = paymentAmount;
+    public Attendance updateAttendance(String attendaceDate, String registrationTime, String courseName, String attendaceState, String verificationToken, String coordinates){
+        this.attendaceDate = attendaceDate;
+        this.registrationTime = registrationTime;
+        this.courseName = courseName;
+        this.attendaceState = attendaceState;
+        this.verificationToken = verificationToken;
+        this.coordinates = coordinates;
         return this;
     }
 }

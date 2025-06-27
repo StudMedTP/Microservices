@@ -20,23 +20,23 @@ public class AttendanceCommandServiceImpl implements AttendanceCommandService {
 
     @Override
     public Long handle(CreateAttendanceCommand command) {
-        if (attendanceRepository.existsByOrderNumber(command.orderNumber())){
+        if (attendanceRepository.existsByVerificationToken(command.verificationToken())){
             throw new IllegalArgumentException("Attendance Already Exists");
         }
-        Attendance Attendance = new Attendance();
+        Attendance attendance =  new Attendance(command);
         try {
-            attendanceRepository.save(Attendance);
+            attendanceRepository.save(attendance);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while saving attendance" + e.getMessage());
         }
-        return Attendance.getId();
+        return attendance.getId();
     }
 
     @Override
     public Optional<Attendance> handle (UpdateAttendanceCommand command) {
 
-        if (attendanceRepository.existsByOrderNumberAndIdIsNot(command.orderNumber(), command.id())){
-            throw new IllegalArgumentException("Attendance with same number already exist");
+        if (attendanceRepository.existsByVerificationTokenAndIdIsNot(command.verificationToken(), command.id())){
+            throw new IllegalArgumentException("Attendance with same verification token already exist");
         }
 
         var result = attendanceRepository.findById(command.id());
@@ -47,13 +47,12 @@ public class AttendanceCommandServiceImpl implements AttendanceCommandService {
         var attendanceToUpdate = result.get();
         try {
             var updatedAttendance = attendanceRepository.save(attendanceToUpdate.updateAttendance(
-                    command.orderNumber(),
-                    command.orderDate(),
-                    command.waitingTime(),
-                    command.totalPrice(),
-                    command.orderStatus(),
-                    command.paymentMethod(),
-                    command.paymentAmount()));
+                    command.attendaceDate(),
+                    command.registrationTime(),
+                    command.courseName(),
+                    command.attendaceState(),
+                    command.verificationToken(),
+                    command.coordinates()));
             return Optional.of(updatedAttendance);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while saving attendance" + e.getMessage());
