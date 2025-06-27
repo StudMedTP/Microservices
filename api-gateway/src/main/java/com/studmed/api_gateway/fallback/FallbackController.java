@@ -22,9 +22,9 @@ public class FallbackController {
         return ResponseEntity.status(500).body("User Service is currently unavailable. Please try again later");
     }
 
-    @RequestMapping("/orderFallback")
-    public ResponseEntity<String> orderFallback() {
-        return ResponseEntity.status(500).body("Order Service is currently unavailable. Please try again later");
+    @RequestMapping("/evaluationFallback")
+    public ResponseEntity<String> attendanceFallback() {
+        return ResponseEntity.status(500).body("Attendance Service is currently unavailable. Please try again later");
     }
 
     @RequestMapping("/soporteFallback")

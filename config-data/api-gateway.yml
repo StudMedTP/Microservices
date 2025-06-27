@@ -43,15 +43,15 @@ spring:
                 name: userServiceCircuitBreaker
                 fallbackUri: forward:/userFallback
 
-        - id: orders
-          uri: lb://orders
+        - id: attendance
+          uri: lb://attendance
           predicates:
-            - Path=/api/v1/orders/**
+            - Path=/api/v1/attendances/**
           filters:
             - name: CircuitBreaker
               args:
-                name: orderServiceCircuitBreaker
-                fallbackUri: forward:/orderFallback
+                name: attendanceServiceCircuitBreaker
+                fallbackUri: forward:/attendanceFallback
 
         - id: soporte
           uri: lb://soporte
@@ -80,7 +80,7 @@ resilience4j.circuitbreaker:
       minimumNumberOfCalls: 5
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
-    orderServiceCircuitBreaker:
+    attendanceServiceCircuitBreaker:
       slidingWindowSize: 10
       minimumNumberOfCalls: 5
       failureRateThreshold: 50

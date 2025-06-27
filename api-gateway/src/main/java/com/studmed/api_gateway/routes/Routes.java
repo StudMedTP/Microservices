@@ -40,7 +40,7 @@ public class Routes {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> productServiceRoute() {
+    public RouterFunction<ServerResponse> evaluationServiceRoute() {
         return loadBalancedTravelBoxRoute(
                 "evaluation",
                 "evaluations",
@@ -67,16 +67,16 @@ public class Routes {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> orderServiceRoute() {
+    public RouterFunction<ServerResponse> attendanceServiceRoute() {
         return loadBalancedTravelBoxRoute(
-                "order",
-                "orders",
-                "/orderFallback"
+                "attendance",
+                "attendances",
+                "/attendanceFallback"
         );
     }
 
     @Bean
-    public RouterFunction<ServerResponse> tripServiceRoute() {
+    public RouterFunction<ServerResponse> soporteServiceRoute() {
         return loadBalancedTravelBoxRoute(
                 "soporte",
                 "soportes",
