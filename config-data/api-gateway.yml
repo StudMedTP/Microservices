@@ -53,15 +53,15 @@ spring:
                 name: orderServiceCircuitBreaker
                 fallbackUri: forward:/orderFallback
 
-        - id: trip
-          uri: lb://trip
+        - id: soporte
+          uri: lb://soporte
           predicates:
-            - Path=/api/v1/trips/**
+            - Path=/api/v1/soportes/**
           filters:
             - name: CircuitBreaker
               args:
-                name: tripServiceCircuitBreaker
-                fallbackUri: forward:/tripFallback
+                name: soporteServiceCircuitBreaker
+                fallbackUri: forward:/soporteFallback
 
 resilience4j.circuitbreaker:
   instances:

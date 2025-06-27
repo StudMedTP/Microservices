@@ -27,8 +27,8 @@ public class FallbackController {
         return ResponseEntity.status(500).body("Order Service is currently unavailable. Please try again later");
     }
 
-    @RequestMapping("/tripFallback")
+    @RequestMapping("/soporteFallback")
     public ResponseEntity<String> tripFallback() {
-        return ResponseEntity.status(500).body("Trip Service is currently unavailable. Please try again later");
+        return ResponseEntity.status(500).body("Soporte Service is currently unavailable. Please try again later");
     }
 }

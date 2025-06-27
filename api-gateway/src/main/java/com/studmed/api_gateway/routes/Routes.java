@@ -78,9 +78,9 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> tripServiceRoute() {
         return loadBalancedTravelBoxRoute(
-                "trip",
-                "trips",
-                "/tripFallback"
+                "soporte",
+                "soportes",
+                "/soporteFallback"
         );
     }
 }
