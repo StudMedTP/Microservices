@@ -20,7 +20,7 @@ public class EvaluationCommandServiceImpl implements EvaluationCommandService {
 
     @Override
     public Long handle(CreateEvaluationCommand command) {
-        if (evaluationRepository.existsByName(command.name())){
+        if (evaluationRepository.existsByTitle(command.title())){
             throw new IllegalArgumentException("Evaluation Already Exists");
         }
         Evaluation evaluation = new Evaluation(command);
@@ -35,8 +35,8 @@ public class EvaluationCommandServiceImpl implements EvaluationCommandService {
     @Override
     public Optional<Evaluation> handle (UpdateEvaluationCommand command) {
 
-        if (evaluationRepository.existsByNameAndIdIsNot(command.name(), command.id())){
-            throw new IllegalArgumentException("Evaluation with same name already exists");
+        if (evaluationRepository.existsByTitleAndIdIsNot(command.title(), command.id())){
+            throw new IllegalArgumentException("Evaluation with same title already exists");
         }
 
         var result = evaluationRepository.findById(command.id());
@@ -47,15 +47,18 @@ public class EvaluationCommandServiceImpl implements EvaluationCommandService {
         var evaluationToUpdate = result.get();
         try {
             var updatedEvaluation = evaluationRepository.save(evaluationToUpdate.updateEvaluation(
-                    command.name(),
+                    command.title(),
+                    command.hospitalName(),
+                    command.courseName(),
                     command.description(),
-                    command.price(),
-                    command.imageUrl(),
-                    command.rating(),
-                    command.category()));
+                    command.startDate(),
+                    command.evaluationState(),
+                    command.feedback(),
+                    command.teacherName(),
+                    command.evaluationGrade()));
             return Optional.of(updatedEvaluation);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error while saving user" + e.getMessage());
+            throw new IllegalArgumentException("Error while saving evaluation" + e.getMessage());
         }
     }
 

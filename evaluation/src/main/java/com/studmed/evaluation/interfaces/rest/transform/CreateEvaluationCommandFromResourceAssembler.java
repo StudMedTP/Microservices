@@ -6,11 +6,14 @@ import com.studmed.evaluation.interfaces.rest.resource.CreateEvaluationResource;
 public class CreateEvaluationCommandFromResourceAssembler {
     public static CreateEvaluationCommand toCommandFromResource(CreateEvaluationResource resource) {
         return new CreateEvaluationCommand(
-                resource.name(),
+                resource.title(),
+                resource.hospitalName(),
+                resource.courseName(),
                 resource.description(),
-                resource.price(),
-                resource.imageUrl(),
-                resource.rating(),
-                resource.category());
+                resource.startDate(),
+                resource.evaluationState(),
+                resource.feedback(),
+                resource.teacherName(),
+                resource.evaluationGrade());
     }
 }

@@ -1,9 +1,12 @@
 package com.studmed.evaluation.interfaces.rest.resource;
 
-public record CreateEvaluationResource(String name,
+public record CreateEvaluationResource(String title,
+                                       String hospitalName,
+                                       String courseName,
                                        String description,
-                                       Double price,
-                                       String imageUrl,
-                                       Double rating,
-                                       String category) {
+                                       String startDate,
+                                       String evaluationState,
+                                       String feedback,
+                                       String teacherName,
+                                       String evaluationGrade) {
 }

@@ -17,58 +17,81 @@ public class Evaluation extends AbstractAggregateRoot<Evaluation> {
     private Long id;
 
     @Getter
-    private String name;
+    private String title;
+
+    @Getter
+    private String hospitalName;
+
+    @Setter
+    @Getter
+    private String courseName;
 
     @Getter
     private String description;
 
-    @Setter
     @Getter
-    private Double price;
+    private String startDate;
 
     @Getter
-    private String imageUrl;
+    private String evaluationState;
 
     @Getter
-    private Double rating;
+    private String feedback;
 
     @Getter
-    private String category;
+    private String teacherName;
+
+    @Getter
+    private String evaluationGrade;
+
 
     public Evaluation() {
-        this.name = Strings.EMPTY;
+        this.title = Strings.EMPTY;
+        this.hospitalName = Strings.EMPTY;
+        this.courseName = Strings.EMPTY;
         this.description = Strings.EMPTY;
-        this.imageUrl = Strings.EMPTY;
-        this.category = Strings.EMPTY;
-        this.price = 0.0;
+        this.startDate = Strings.EMPTY;
+        this.evaluationState = Strings.EMPTY;
+        this.feedback = Strings.EMPTY;
+        this.teacherName = Strings.EMPTY;
+        this.evaluationGrade = Strings.EMPTY;
     }
 
-    public Evaluation(String name, String description, Double price, String imageUrl, Double rating, String category) {
-        this.name = name;
+    public Evaluation(String title, String hospitalName, String courseName, String description, String startDate, String evaluationState, String feedback, String teacherName, String evaluationGrade) {
+        this.title = title;
+        this.hospitalName = hospitalName;
+        this.courseName = courseName;
         this.description = description;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.rating = rating;
-        this.category = category;
+        this.startDate = startDate;
+        this.evaluationState = evaluationState;
+        this.feedback = feedback;
+        this.teacherName = teacherName;
+        this.evaluationGrade = evaluationGrade;
     }
 
     public Evaluation(CreateEvaluationCommand command){
         this();
-        this.name = command.name();
+        this.title = command.title();
+        this.hospitalName = command.hospitalName();
+        this.courseName = command.courseName();
         this.description = command.description();
-        this.price = command.price();
-        this.imageUrl = command.imageUrl();
-        this.rating = command.rating();
-        this.category = command.category();
+        this.startDate = command.startDate();
+        this.evaluationState = command.evaluationState();
+        this.feedback = command.feedback();
+        this.teacherName = command.teacherName();
+        this.evaluationGrade = command.evaluationGrade();
     }
 
-    public Evaluation updateEvaluation(String name, String description, Double price, String imageUrl, Double rating, String category){
-        this.name = name;
+    public Evaluation updateEvaluation(String title, String hospitalName, String courseName, String description, String startDate, String evaluationState, String feedback, String teacherName, String evaluationGrade){
+        this.title = title;
+        this.hospitalName = hospitalName;
+        this.courseName = courseName;
         this.description = description;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.rating = rating;
-        this.category = category;
+        this.startDate = startDate;
+        this.evaluationState = evaluationState;
+        this.feedback = feedback;
+        this.teacherName = teacherName;
+        this.evaluationGrade = evaluationGrade;
         return this;
     }
 }
