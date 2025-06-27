@@ -23,15 +23,15 @@ spring:
                 name: evaluationServiceCircuitBreaker
                 fallbackUri: forward:/evaluationFallback
 
-        - id: cart
-          uri: lb://cart
+        - id: notification
+          uri: lb://notification
           predicates:
-            - Path=/api/v1/carts/**
+            - Path=/api/v1/notifications/**
           filters:
             - name: CircuitBreaker
               args:
-                name: cartServiceCircuitBreaker
-                fallbackUri: forward:/cartFallback
+                name: notificationServiceCircuitBreaker
+                fallbackUri: forward:/notificationFallback
 
         - id: user
           uri: lb://user
@@ -65,12 +65,12 @@ spring:
 
 resilience4j.circuitbreaker:
   instances:
-    productServiceCircuitBreaker:
+    evaluationServiceCircuitBreaker:
       slidingWindowSize: 10
       minimumNumberOfCalls: 5
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
-    cartServiceCircuitBreaker:
+    notificationServiceCircuitBreaker:
       slidingWindowSize: 10
       minimumNumberOfCalls: 5
       failureRateThreshold: 50
@@ -85,7 +85,7 @@ resilience4j.circuitbreaker:
       minimumNumberOfCalls: 5
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
-    tripServiceCircuitBreaker:
+    soporteServiceCircuitBreaker:
       slidingWindowSize: 10
       minimumNumberOfCalls: 5
       failureRateThreshold: 50

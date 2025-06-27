@@ -49,11 +49,11 @@ public class Routes {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> cartServiceRoute() {
+    public RouterFunction<ServerResponse> notificationServiceRoute() {
         return loadBalancedTravelBoxRoute(
-                "cart",
-                "carts",
-                "/cartFallback"
+                "notification",
+                "notifications",
+                "/notificationFallback"
         );
     }
 

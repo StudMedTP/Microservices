@@ -1,6 +1,6 @@
 spring:
   application:
-    name: product
+    name: evaluation
   cloud:
     config:
       uri: http://localhost:8081

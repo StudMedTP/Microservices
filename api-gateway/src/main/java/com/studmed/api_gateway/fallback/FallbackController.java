@@ -12,9 +12,9 @@ public class FallbackController {
         return ResponseEntity.status(500).body("Evaluation Service is currently unavailable. Please try again later");
     }
 
-    @RequestMapping("/cartFallback")
-    public ResponseEntity<String> cartFallback() {
-        return ResponseEntity.status(500).body("Cart Service is currently unavailable. Please try again later");
+    @RequestMapping("/notificationFallback")
+    public ResponseEntity<String> notificationFallback() {
+        return ResponseEntity.status(500).body("Notification Service is currently unavailable. Please try again later");
     }
 
     @RequestMapping("/userFallback")
