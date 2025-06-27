@@ -42,9 +42,9 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> productServiceRoute() {
         return loadBalancedTravelBoxRoute(
-                "product",
-                "products",
-                "/productFallback"
+                "evaluation",
+                "evaluations",
+                "/evaluationFallback"
         );
     }
 

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Soporte
+    name: soporte
   cloud:
     config:
       uri: http://localhost:8081

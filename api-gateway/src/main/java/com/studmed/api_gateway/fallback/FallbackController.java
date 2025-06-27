@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FallbackController {
 
-    @RequestMapping("/productFallback")
-    public ResponseEntity<String> productFallback() {
-        return ResponseEntity.status(500).body("Product Service is currently unavailable. Please try again later");
+    @RequestMapping("/evaluationFallback")
+    public ResponseEntity<String> evaluationFallback() {
+        return ResponseEntity.status(500).body("Evaluation Service is currently unavailable. Please try again later");
     }
 
     @RequestMapping("/cartFallback")
