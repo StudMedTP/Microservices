@@ -1,9 +1,11 @@
 package com.studmed.user.interfaces.rest.resource;
 
-public record UpdateUserResource (String firstName,
+public record UpdateUserResource (String rol,
+                                  String firstName,
                                   String lastName,
                                   String email,
                                   String userName,
                                   String password,
-                                  String phoneNumber){
+                                  String phoneNumber,
+                                  String userImg){
 }

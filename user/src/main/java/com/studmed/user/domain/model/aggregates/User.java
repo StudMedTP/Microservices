@@ -18,6 +18,10 @@ public class User extends AbstractAggregateRoot<User> {
 
     @Setter
     @Getter
+    private String rol;
+
+    @Setter
+    @Getter
     private String firstName;
 
     @Setter
@@ -40,41 +44,53 @@ public class User extends AbstractAggregateRoot<User> {
     @Getter
     private String phoneNumber;
 
+    @Setter
+    @Getter
+    private String userImg;
+
     public User() {
+        this.rol = Strings.EMPTY;
         this.firstName = Strings.EMPTY;
         this.lastName = Strings.EMPTY;
         this.email = Strings.EMPTY;
         this.userName = Strings.EMPTY;
         this.password = Strings.EMPTY;
         this.phoneNumber = Strings.EMPTY;
+        this.userImg = Strings.EMPTY;
     }
 
-    public User(String firstName, String lastName, String email, String userName, String password, String phoneNumber) {
+    public User(String rol, String firstName, String lastName, String email, String userName, String password, String phoneNumber, String userImg) {
+        this.rol = rol;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.userName = userName;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.userImg = userImg;
     }
 
     public User (CreateUserCommand command){
         this();
+        this.rol = command.rol();
         this.firstName = command.firstName();
         this.lastName = command.lastName();
         this.email = command.email();
         this.userName = command.userName();
         this.password = command.password();
         this.phoneNumber = command.phoneNumber();
+        this.userImg = command.userImg();
     }
 
-    public User updateUser(String firstName, String lastName, String email, String userName, String password, String phoneNumber) {
+    public User updateUser(String rol, String firstName, String lastName, String email, String userName, String password, String phoneNumber, String userImg) {
+        this.rol = rol;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.userName = userName;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.userImg = userImg;
         return this;
     }
 }
