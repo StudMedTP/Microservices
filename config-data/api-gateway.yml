@@ -12,52 +12,28 @@ spring:
           uri: lb://evaluation
           predicates:
             - Path=/api/v1/evaluations/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: evaluationServiceCircuitBreaker
-                fallbackUri: forward:/evaluationFallback
 
         - id: notification
           uri: lb://notification
           predicates:
             - Path=/api/v1/notifications/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: notificationServiceCircuitBreaker
-                fallbackUri: forward:/notificationFallback
 
         - id: users
           uri: lb://user
           predicates:
             - Path=/microservice-user/users/**
           filters:
-            - name: CircuitBreaker
-              args:
-                name: userServiceCircuitBreaker
-                fallbackUri: forward:/userFallback
             - RewritePath=/microservice-user/users, /users
 
         - id: attendance
           uri: lb://attendance
           predicates:
             - Path=/api/v1/attendances/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: attendanceServiceCircuitBreaker
-                fallbackUri: forward:/attendanceFallback
 
         - id: soporte
           uri: lb://soporte
           predicates:
             - Path=/api/v1/soportes/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: soporteServiceCircuitBreaker
-                fallbackUri: forward:/soporteFallback
 
         - id: user-swagger
           uri: lb://user
