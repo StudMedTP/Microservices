@@ -1,11 +1,6 @@
 server:
   port: 8080
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8099/eureka/
-
 spring:
   cloud:
     gateway:
@@ -33,15 +28,16 @@ spring:
                 name: notificationServiceCircuitBreaker
                 fallbackUri: forward:/notificationFallback
 
-        - id: user
+        - id: users
           uri: lb://user
           predicates:
-            - Path=/api/v1/users/**
+            - Path=/microservice-user/users/**
           filters:
             - name: CircuitBreaker
               args:
                 name: userServiceCircuitBreaker
                 fallbackUri: forward:/userFallback
+            - RewritePath=/microservice-user/users, /users
 
         - id: attendance
           uri: lb://attendance
@@ -62,6 +58,23 @@ spring:
               args:
                 name: soporteServiceCircuitBreaker
                 fallbackUri: forward:/soporteFallback
+
+        - id: user-swagger
+          uri: lb://user
+          predicates:
+            - Path=/user/v3/api-docs
+          filters:
+            - RewritePath=/user/v3/api-docs, /v3/api-docs
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - url: /user/v3/api-docs
+        name: User Microservice
 
 resilience4j.circuitbreaker:
   instances:
