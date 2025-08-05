@@ -8,3 +8,15 @@ spring:
         git:
           uri: https://github.com/StudMedTP/Microservices.git
           search-paths: config-data
+          username: ${GIT_USER}
+          password: ${GIT_PASSWORD}
+  security:
+    user:
+      name: root
+      password: s3cr3t
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
