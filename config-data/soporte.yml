@@ -2,21 +2,11 @@ server:
   port: 8095
 
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/soporte_db
-    username: root
-    password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     open-in-view: false
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8099/eureka/
 
 management:
   endpoints:

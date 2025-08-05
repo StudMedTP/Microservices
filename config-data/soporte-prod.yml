@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql-134a03d4-mysql-63da.b.aivencloud.com:19273/soporte_db
+    username: avnadmin
+    password: AVNS_XLYi5qXnUjvu13Zgkrc
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  boot:
+    admin:
+      client:
+        url: http://admin-microservices:8086
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-service:8099/eureka/
