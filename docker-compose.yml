@@ -1,0 +1,14 @@
+services:
+  config-service:
+    build: ./config-service
+    container_name: config-service
+    ports:
+      - "8081:8081"
+    environment:
+      - GIT_USER=${GIT_USER}
+      - GIT_PASSWORD=${GIT_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
