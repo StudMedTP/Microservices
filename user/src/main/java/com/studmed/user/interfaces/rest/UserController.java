@@ -12,8 +12,9 @@ import com.studmed.user.interfaces.rest.transform.UserResourceFromEntityAssemble
 import com.studmed.user.interfaces.rest.resource.CreateUserResource;
 import com.studmed.user.interfaces.rest.resource.UpdateUserResource;
 import com.studmed.user.interfaces.rest.resource.UserResource;
-import com.studmed.user.shared.JwtToken;
+import com.studmed.user.security.JwtUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +31,12 @@ public class UserController {
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
 
-    private final JwtToken jwtToken;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UserCommandService userCommandService, UserQueryService userQueryService, JwtToken jwtToken) {
+    public UserController(UserCommandService userCommandService, UserQueryService userQueryService, JwtUtil jwtUtil) {
         this.userCommandService = userCommandService;
         this.userQueryService = userQueryService;
-        this.jwtToken = jwtToken;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
@@ -65,7 +66,7 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
 
-        String tokenString = jwtToken.generateToken(user.get().getId());
+        String tokenString = jwtUtil.generateToken(user.get());
 
         return ResponseEntity.ok(tokenString);
     }
@@ -110,14 +111,14 @@ public class UserController {
     }
 
     @GetMapping("/myObject")
-    public ResponseEntity<UserResource> getUserByToken(@RequestHeader("Authorization") String token) {
-        if (token == null) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserResource> getUserByToken(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Long id = Long.valueOf(jwtToken.getIdFromToken(token));
-
-        var getUserByIdQuery = new GetUserByIdQuery(id);
+        var getUserByIdQuery = new GetUserByIdQuery(userId);
         var user = userQueryService.handle(getUserByIdQuery);
         if (user.isEmpty()) {
             return ResponseEntity.badRequest().build();
