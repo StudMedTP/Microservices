@@ -12,52 +12,30 @@ spring:
           uri: lb://evaluation
           predicates:
             - Path=/api/v1/evaluations/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: evaluationServiceCircuitBreaker
-                fallbackUri: forward:/evaluationFallback
 
         - id: notification
           uri: lb://notification
           predicates:
             - Path=/api/v1/notifications/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: notificationServiceCircuitBreaker
-                fallbackUri: forward:/notificationFallback
 
-        - id: users
+        - id: user
           uri: lb://user
           predicates:
             - Path=/microservice-user/users/**
           filters:
-            - name: CircuitBreaker
-              args:
-                name: userServiceCircuitBreaker
-                fallbackUri: forward:/userFallback
             - RewritePath=/microservice-user/users, /users
 
         - id: attendance
           uri: lb://attendance
           predicates:
             - Path=/api/v1/attendances/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: attendanceServiceCircuitBreaker
-                fallbackUri: forward:/attendanceFallback
 
         - id: soporte
           uri: lb://soporte
           predicates:
-            - Path=/api/v1/soportes/**
+            - Path=/microservice-soporte/soportes/**
           filters:
-            - name: CircuitBreaker
-              args:
-                name: soporteServiceCircuitBreaker
-                fallbackUri: forward:/soporteFallback
+            - RewritePath=/microservice-soporte/soportes, /soportes
 
         - id: user-swagger
           uri: lb://user
@@ -65,6 +43,12 @@ spring:
             - Path=/user/v3/api-docs
           filters:
             - RewritePath=/user/v3/api-docs, /v3/api-docs
+        - id: soporte-swagger
+          uri: lb://soporte
+          predicates:
+            - Path=/soporte/v3/api-docs
+          filters:
+            - RewritePath=/soporte/v3/api-docs, /v3/api-docs
 
 springdoc:
   api-docs:
@@ -75,31 +59,5 @@ springdoc:
     urls:
       - url: /user/v3/api-docs
         name: User Microservice
-
-resilience4j.circuitbreaker:
-  instances:
-    evaluationServiceCircuitBreaker:
-      slidingWindowSize: 10
-      minimumNumberOfCalls: 5
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
-    notificationServiceCircuitBreaker:
-      slidingWindowSize: 10
-      minimumNumberOfCalls: 5
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
-    userServiceCircuitBreaker:
-      slidingWindowSize: 10
-      minimumNumberOfCalls: 5
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
-    attendanceServiceCircuitBreaker:
-      slidingWindowSize: 10
-      minimumNumberOfCalls: 5
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
-    soporteServiceCircuitBreaker:
-      slidingWindowSize: 10
-      minimumNumberOfCalls: 5
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
+      - url: /soporte/v3/api-docs
+        name: Soporte Microservice
