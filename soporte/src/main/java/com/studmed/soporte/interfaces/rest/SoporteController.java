@@ -21,7 +21,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "api/v1/soportes", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/soportes", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "Soporte", description = "Soporte Management Endpoints")
 public class SoporteController {
 

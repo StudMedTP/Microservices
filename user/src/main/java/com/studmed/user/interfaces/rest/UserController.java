@@ -23,7 +23,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "api/v1/users", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
 @Tag(name = "User", description = "User Management Endpoints")
 public class UserController {
 
