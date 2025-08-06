@@ -12,6 +12,7 @@ public class CreateSoporteCommandFromResourceAssembler {
                 resource.ticketState(),
                 resource.ticketResponseTitle(),
                 resource.ticketResponseMessage(),
-                resource.ticketResponseTime());
+                resource.ticketResponseTime(),
+                resource.userId());
     }
 }

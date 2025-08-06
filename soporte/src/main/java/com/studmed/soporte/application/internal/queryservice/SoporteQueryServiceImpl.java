@@ -1,5 +1,6 @@
 package com.studmed.soporte.application.internal.queryservice;
 
+import com.studmed.soporte.client.UserClient;
 import com.studmed.soporte.domain.model.aggregates.Soporte;
 import com.studmed.soporte.domain.model.queries.GetAllSoporteQuery;
 import com.studmed.soporte.domain.model.queries.GetSoporteByIdQuery;
@@ -15,8 +16,11 @@ public class SoporteQueryServiceImpl implements SoporteQueryService {
 
     private final SoporteRepository soporteRepository;
 
-    public SoporteQueryServiceImpl(SoporteRepository soporteRepository) {
+    private final UserClient userClient;
+
+    public SoporteQueryServiceImpl(SoporteRepository soporteRepository, UserClient userClient) {
         this.soporteRepository = soporteRepository;
+        this.userClient = userClient;
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.studmed.soporte.application.internal.commandservice;
 
+import com.studmed.soporte.client.UserClient;
 import com.studmed.soporte.domain.model.aggregates.Soporte;
+import com.studmed.soporte.domain.model.client.User;
 import com.studmed.soporte.domain.model.commands.CreateSoporteCommand;
 import com.studmed.soporte.domain.model.commands.DeleteSoporteCommand;
 import com.studmed.soporte.domain.model.commands.UpdateSoporteCommand;
 import com.studmed.soporte.domain.service.SoporteCommandService;
 import com.studmed.soporte.infraestructure.persistance.jpa.repositories.SoporteRepository;
+import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,8 +17,12 @@ import java.util.Optional;
 public class SoporteCommandServiceImpl implements SoporteCommandService {
 
     public final SoporteRepository soporteRepository;
-    public SoporteCommandServiceImpl(SoporteRepository soporteRepository) {
+
+    private final UserClient userClient;
+
+    public SoporteCommandServiceImpl(SoporteRepository soporteRepository, UserClient userClient) {
         this.soporteRepository = soporteRepository;
+        this.userClient = userClient;
     }
 
     @Override
@@ -24,13 +31,20 @@ public class SoporteCommandServiceImpl implements SoporteCommandService {
             throw new IllegalArgumentException("Soporte already exists");
         }
 
-        Soporte soporte = new Soporte(command);
         try {
-            soporteRepository.save(soporte);
+            User user = userClient.getUserById(command.userId()).getBody();
+            Soporte soporte = new Soporte(command);
+            try {
+                soporteRepository.save(soporte);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Error while saving soporte" + e.getMessage());
+            }
+            return soporte.getId();
+        } catch (FeignException.BadRequest e) {
+            throw new RuntimeException("El usuario con ID " + command.userId() + " no existe.");
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error while saving soporte" + e.getMessage());
+            throw new RuntimeException("Error al validar usuario");
         }
-        return soporte.getId();
     }
 
     @Override

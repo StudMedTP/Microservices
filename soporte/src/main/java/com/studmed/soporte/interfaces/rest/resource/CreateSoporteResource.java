@@ -6,5 +6,6 @@ public record CreateSoporteResource(String ticketCreationTime,
                                     String ticketState,
                                     String ticketResponseTitle,
                                     String ticketResponseMessage,
-                                    String ticketResponseTime){
+                                    String ticketResponseTime,
+                                    Long userId){
 }

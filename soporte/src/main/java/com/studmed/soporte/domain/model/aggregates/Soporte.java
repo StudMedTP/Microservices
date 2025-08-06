@@ -1,5 +1,6 @@
 package com.studmed.soporte.domain.model.aggregates;
 
+import com.studmed.soporte.domain.model.client.User;
 import com.studmed.soporte.domain.model.commands.CreateSoporteCommand;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,6 +37,13 @@ public class Soporte extends AbstractAggregateRoot<Soporte> {
     @Getter
     private String ticketResponseTime;
 
+    @Getter
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Transient
+    private User user;
+
     public Soporte() {
         this.ticketCreationTime = Strings.EMPTY;
         this.ticketSentTitle = Strings.EMPTY;
@@ -44,9 +52,10 @@ public class Soporte extends AbstractAggregateRoot<Soporte> {
         this.ticketResponseTitle = Strings.EMPTY;
         this.ticketResponseMessage = Strings.EMPTY;
         this.ticketResponseTime = Strings.EMPTY;
+        this.userId = 0L;
     }
 
-    public Soporte(String ticketCreationTime, String ticketSentTitle, String ticketSentMessage, String ticketState, String ticketResponseTitle, String ticketResponseMessage, String ticketResponseTime) {
+    public Soporte(String ticketCreationTime, String ticketSentTitle, String ticketSentMessage, String ticketState, String ticketResponseTitle, String ticketResponseMessage, String ticketResponseTime, Long userId) {
         this.ticketCreationTime = ticketCreationTime;
         this.ticketSentTitle = ticketSentTitle;
         this.ticketSentMessage = ticketSentMessage;
@@ -54,6 +63,7 @@ public class Soporte extends AbstractAggregateRoot<Soporte> {
         this.ticketResponseTitle = ticketResponseTitle;
         this.ticketResponseMessage = ticketResponseMessage;
         this.ticketResponseTime = ticketResponseTime;
+        this.userId = userId;
     }
 
     public Soporte(CreateSoporteCommand command) {
@@ -65,6 +75,7 @@ public class Soporte extends AbstractAggregateRoot<Soporte> {
         this.ticketResponseTitle = command.ticketResponseTitle();
         this.ticketResponseMessage = command.ticketResponseMessage();
         this.ticketResponseTime = command.ticketResponseTime();
+        this.userId = command.userId();
     }
 
     public Soporte updateSoporte(String ticketCreationTime, String ticketSentTitle, String ticketSentMessage, String ticketState, String ticketResponseTitle, String ticketResponseMessage, String ticketResponseTime) {
