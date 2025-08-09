@@ -1,5 +1,8 @@
 package com.studmed.user.student.intefaces.rest.resource;
 
-public record StudentResource(Long id,
-                              String studentCode) {
-}
+import com.studmed.user.user.interfaces.rest.resource.UserResource;
+
+public record StudentResource(
+        Long id,
+        String studentCode,
+        UserResource userResource) {}

@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleGeneralError() {
-        return ResponseEntity.internalServerError().body(Map.of("error", "Ocurrió un error inesperado"));
+    public ResponseEntity<Map<String, String>> handleGeneralError(Exception ex) {
+        return ResponseEntity.internalServerError().body(Map.of("error", ex.getMessage()));
     }
 }

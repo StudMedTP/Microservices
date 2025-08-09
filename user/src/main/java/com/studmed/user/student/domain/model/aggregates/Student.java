@@ -1,6 +1,7 @@
 package com.studmed.user.student.domain.model.aggregates;
 
 import com.studmed.user.student.domain.model.commands.CreateStudentCommand;
+import com.studmed.user.user.domain.model.aggregates.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,8 +18,13 @@ public class Student {
 
     private String studentCode;
 
-    public Student (CreateStudentCommand command){
+    @OneToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
+    public Student (CreateStudentCommand command, User user){
         this();
         this.studentCode = command.studentCode();
+        this.user = user;
     }
 }

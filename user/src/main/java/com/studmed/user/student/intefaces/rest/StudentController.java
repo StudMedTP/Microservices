@@ -34,16 +34,12 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<StudentResource> createStudent(@RequestBody @Valid CreateStudentResource createStudentResource) {
-
         CreateStudentCommand createStudentCommand = CreateStudentCommandFromResourceAssembler.toCommandFromResource(createStudentResource);
         Long id = studentCommandService.handle(createStudentCommand);
 
-        Optional<Student> student = studentQueryService.handle(new GetStudentByIdQuery(id));
-        if (student.isEmpty()) {
-            throw new IllegalArgumentException("El estudiante no pudo ser creado");
-        }
+        Student student = studentQueryService.handle(new GetStudentByIdQuery(id));
 
-        StudentResource studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student.get());
+        StudentResource studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(studentResource);
     }
 
@@ -53,12 +49,9 @@ public class StudentController {
             throw new BadRequestException("El ID debe ser mayor que 0");
         }
 
-        Optional<Student> student = studentQueryService.handle(new GetStudentByIdQuery(id));
-        if (student.isEmpty()) {
-            throw new ResourceNotFoundException("No se encontró estudiante");
-        }
+        Student student = studentQueryService.handle(new GetStudentByIdQuery(id));
 
-        StudentResource studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student.get());
+        StudentResource studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student);
         return ResponseEntity.ok(studentResource);
     }
 }
