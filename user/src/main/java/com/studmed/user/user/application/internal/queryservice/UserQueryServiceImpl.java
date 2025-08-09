@@ -1,11 +1,11 @@
-package com.studmed.user.user.internal.queryservice;
+package com.studmed.user.user.application.internal.queryservice;
 
 import com.studmed.user.user.domain.model.aggregates.User;
 import com.studmed.user.user.domain.model.queries.GetAllUserQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByIdQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByUsernameAndPassword;
 import com.studmed.user.user.domain.service.UserQueryService;
-import com.studmed.user.user.repositories.UserRepository;
+import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

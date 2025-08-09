@@ -1,7 +1,7 @@
-package com.studmed.user.user.rest.transform;
+package com.studmed.user.user.interfaces.rest.transform;
 
 import com.studmed.user.user.domain.model.aggregates.User;
-import com.studmed.user.user.rest.resource.UserResource;
+import com.studmed.user.user.interfaces.rest.resource.UserResource;
 
 public class UserResourceFromEntityAssembler {
     public static UserResource toResourceFromEntity(User entity){

@@ -1,4 +1,4 @@
-package com.studmed.user.user.rest;
+package com.studmed.user.user.interfaces.rest;
 
 import com.studmed.user.user.domain.model.commands.DeleteUserCommand;
 import com.studmed.user.user.domain.model.queries.GetAllUserQuery;
@@ -6,12 +6,12 @@ import com.studmed.user.user.domain.model.queries.GetUserByIdQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByUsernameAndPassword;
 import com.studmed.user.user.domain.service.UserCommandService;
 import com.studmed.user.user.domain.service.UserQueryService;
-import com.studmed.user.user.rest.transform.CreateUserCommandFromResourceAssembler;
-import com.studmed.user.user.rest.transform.UpdateUserCommandFromResourceAssembler;
-import com.studmed.user.user.rest.transform.UserResourceFromEntityAssembler;
-import com.studmed.user.user.rest.resource.CreateUserResource;
-import com.studmed.user.user.rest.resource.UpdateUserResource;
-import com.studmed.user.user.rest.resource.UserResource;
+import com.studmed.user.user.interfaces.rest.transform.CreateUserCommandFromResourceAssembler;
+import com.studmed.user.user.interfaces.rest.transform.UpdateUserCommandFromResourceAssembler;
+import com.studmed.user.user.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.studmed.user.user.interfaces.rest.resource.CreateUserResource;
+import com.studmed.user.user.interfaces.rest.resource.UpdateUserResource;
+import com.studmed.user.user.interfaces.rest.resource.UserResource;
 import com.studmed.user.user.security.JwtUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

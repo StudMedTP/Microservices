@@ -1,4 +1,4 @@
-package com.studmed.user.user.repositories;
+package com.studmed.user.user.infraestructure.persistance.jpa.repositories;
 
 import com.studmed.user.user.domain.model.aggregates.User;
 import org.springframework.data.jpa.repository.JpaRepository;

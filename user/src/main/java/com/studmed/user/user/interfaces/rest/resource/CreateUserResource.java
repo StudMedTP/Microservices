@@ -1,4 +1,4 @@
-package com.studmed.user.user.rest.resource;
+package com.studmed.user.user.interfaces.rest.resource;
 
 public record CreateUserResource (String rol,
                                   String firstName,

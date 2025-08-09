@@ -1,11 +1,11 @@
-package com.studmed.user.user.internal.commandservice;
+package com.studmed.user.user.application.internal.commandservice;
 
 import com.studmed.user.user.domain.model.aggregates.User;
 import com.studmed.user.user.domain.model.commands.CreateUserCommand;
 import com.studmed.user.user.domain.model.commands.DeleteUserCommand;
 import com.studmed.user.user.domain.model.commands.UpdateUserCommand;
 import com.studmed.user.user.domain.service.UserCommandService;
-import com.studmed.user.user.repositories.UserRepository;
+import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
