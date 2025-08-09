@@ -1,6 +1,6 @@
 package com.studmed.user.shared;
 
-import com.studmed.user.security.JwtAuthenticationFilter;
+import com.studmed.user.user.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
