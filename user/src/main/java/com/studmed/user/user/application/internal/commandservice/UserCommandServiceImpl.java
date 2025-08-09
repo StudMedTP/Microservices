@@ -30,41 +30,34 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     @Override
-    public Optional<User> handle (UpdateUserCommand command) {
+    public Long handle (UpdateUserCommand command) {
+        Optional<User> userOptional = userRepository.findById(command.id());
 
-        if (userRepository.existsByEmailAndIdIsNot(command.email(), command.id())){
-            throw new IllegalArgumentException("User with same email already exist");
+        if (userOptional.isEmpty()) {
+            throw new IllegalArgumentException("No se encontró usuario");
         }
 
-        var result = userRepository.findById(command.id());
-        if (result.isEmpty()){
-            throw new IllegalArgumentException("User does not exist");
+        if (userRepository.existsByEmailAndIdIsNot(command.email(), command.id())) {
+            throw new IllegalArgumentException("Ya existe un usuario con ese correo");
         }
 
-        var userToUpdate = result.get();
-        try {
-            var updatedUser = userRepository.save(userToUpdate.updateUser(
-                    command.firstName(),
-                    command.lastName(),
-                    command.email(),
-                    command.password(),
-                    command.userImg()));
-            return Optional.of(updatedUser);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error while saving user" + e.getMessage());
-        }
+        User user = userOptional.get();
+
+        user.setFirstName(command.firstName());
+        user.setLastName(command.lastName());
+        user.setEmail(command.email());
+        user.setPassword(command.password());
+        user.setUserImg(command.userImg());
+
+        return userRepository.save(user).getId();
     }
 
     @Override
     public void handle (DeleteUserCommand command) {
+        if(!userRepository.existsById(command.id())) {
+            throw new IllegalArgumentException("El usuario no existe");
+        }
 
-        if(!userRepository.existsById(command.id())){
-            throw new IllegalArgumentException("User does not exist");
-        }
-        try {
-            userRepository.deleteById(command.id());
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error while deleting user" + e.getMessage());
-        }
+        userRepository.deleteById(command.id());
     }
 }

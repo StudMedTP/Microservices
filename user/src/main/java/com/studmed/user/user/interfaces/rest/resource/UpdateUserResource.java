@@ -1,11 +1,15 @@
 package com.studmed.user.user.interfaces.rest.resource;
 
-public record UpdateUserResource (String rol,
-                                  String firstName,
-                                  String lastName,
-                                  String email,
-                                  String userName,
-                                  String password,
-                                  String phoneNumber,
-                                  String userImg){
-}
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdateUserResource (
+        @NotBlank()
+        String firstName,
+        @NotBlank()
+        String lastName,
+        @NotBlank()
+        String email,
+        @NotBlank()
+        String password,
+        @NotBlank()
+        String userImg) {}

@@ -4,9 +4,10 @@ import com.studmed.user.shared.exception.BadRequestException;
 import com.studmed.user.user.domain.model.aggregates.User;
 import com.studmed.user.user.domain.model.commands.CreateUserCommand;
 import com.studmed.user.user.domain.model.commands.DeleteUserCommand;
+import com.studmed.user.user.domain.model.commands.UpdateUserCommand;
 import com.studmed.user.user.domain.model.queries.GetAllUserQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByIdQuery;
-import com.studmed.user.user.domain.model.queries.GetUserByUsernameAndPassword;
+import com.studmed.user.user.domain.model.queries.GetUserByEmail;
 import com.studmed.user.user.domain.service.UserCommandService;
 import com.studmed.user.user.domain.service.UserQueryService;
 import com.studmed.user.user.interfaces.rest.transform.CreateUserCommandFromResourceAssembler;
@@ -52,24 +53,20 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResource);
     }
 
-    @GetMapping("/{username}/{password}")
-    public ResponseEntity<String> login(@PathVariable String username, @PathVariable String password) {
-        var getUserByUsernameAndPassword = new GetUserByUsernameAndPassword(username, password);
-        var user = userQueryService.handle(getUserByUsernameAndPassword);
-        if (user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+    @GetMapping("/{email}/{password}")
+    public ResponseEntity<String> login(@PathVariable String email, @PathVariable String password) {
+        User user = userQueryService.handle(new GetUserByEmail(email, password));
 
-        String tokenString = jwtUtil.generateToken(user.get());
+        String tokenString = jwtUtil.generateToken(user);
 
         return ResponseEntity.ok(tokenString);
     }
 
     @GetMapping
     public ResponseEntity<List<UserResource>> getAllUsers() {
-        var getAllUserQuery = new GetAllUserQuery();
-        var user = userQueryService.handle(getAllUserQuery);
-        var userResource = user.stream().map(UserResourceFromEntityAssembler::toResourceFromEntity).toList();
+        List<User> user = userQueryService.handle(new GetAllUserQuery());
+
+        List<UserResource> userResource = user.stream().map(UserResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(userResource);
     }
 
@@ -86,22 +83,26 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResource> updateUser(@PathVariable Long id, @RequestBody UpdateUserResource updateUserResource) {
-        var updateUserCommand = UpdateUserCommandFromResourceAssembler.toCommandFromResource(id, updateUserResource);
-        var updateUser = userCommandService.handle(updateUserCommand);
-        if (updateUser.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserResource> updateUser(@PathVariable Long id, @RequestBody @Valid UpdateUserResource updateUserResource) {
+        if (id <= 0) {
+            throw new BadRequestException("El ID debe ser mayor que 0");
         }
 
-        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(updateUser.get());
+        UpdateUserCommand updateUserCommand = UpdateUserCommandFromResourceAssembler.toCommandFromResource(id, updateUserResource);
+        Long userId = userCommandService.handle(updateUserCommand);
+
+        User user = userQueryService.handle(new GetUserByIdQuery(userId));
+
+        UserResource userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user);
         return ResponseEntity.ok(userResource);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        var deleteUserCommand = new DeleteUserCommand(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        DeleteUserCommand deleteUserCommand = new DeleteUserCommand(id);
         userCommandService.handle(deleteUserCommand);
-        return ResponseEntity.ok("User with given id successfully deleted");
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/myObject")
