@@ -1,5 +1,8 @@
 package com.studmed.user.user.interfaces.rest;
 
+import com.studmed.user.shared.exception.BadRequestException;
+import com.studmed.user.user.domain.model.aggregates.User;
+import com.studmed.user.user.domain.model.commands.CreateUserCommand;
 import com.studmed.user.user.domain.model.commands.DeleteUserCommand;
 import com.studmed.user.user.domain.model.queries.GetAllUserQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByIdQuery;
@@ -15,16 +18,15 @@ import com.studmed.user.user.interfaces.rest.resource.UserResource;
 import com.studmed.user.user.security.JwtUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 @RestController
-@RequestMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/users")
 @Tag(name = "User", description = "User Management Endpoints")
 public class UserController {
 
@@ -40,22 +42,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResource> createUser(@RequestBody CreateUserResource createUserResource) {
+    public ResponseEntity<UserResource> createUser(@RequestBody @Valid CreateUserResource createUserResource) {
+        CreateUserCommand createUserCommand = CreateUserCommandFromResourceAssembler.toCommandFromResource(createUserResource);
+        Long id = userCommandService.handle(createUserCommand);
 
-        var createUserCommand = CreateUserCommandFromResourceAssembler.toCommandFromResource(createUserResource);
-        var id = userCommandService.handle(createUserCommand);
-        if (id == 0L) {
-            return ResponseEntity.badRequest().build();
-        }
+        User user = userQueryService.handle(new GetUserByIdQuery(id));
 
-        var getUserByIdQuery = new GetUserByIdQuery(id);
-        var user = userQueryService.handle(getUserByIdQuery);
-        if (user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
-        return new ResponseEntity<>(userResource, HttpStatus.CREATED);
+        UserResource userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResource);
     }
 
     @GetMapping("/{username}/{password}")
@@ -81,13 +75,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResource> getUserById(@PathVariable Long id) {
-        var getUserByIdQuery = new GetUserByIdQuery(id);
-        var user = userQueryService.handle(getUserByIdQuery);
-        if (user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+        if (id <= 0) {
+            throw new BadRequestException("El ID debe ser mayor que 0");
         }
 
-        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
+        User user = userQueryService.handle(new GetUserByIdQuery(id));
+
+        UserResource userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user);
         return ResponseEntity.ok(userResource);
     }
 
@@ -118,13 +112,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        var getUserByIdQuery = new GetUserByIdQuery(userId);
-        var user = userQueryService.handle(getUserByIdQuery);
-        if (user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+        User user = userQueryService.handle(new GetUserByIdQuery(userId));
 
-        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
+        UserResource userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user);
         return ResponseEntity.ok(userResource);
     }
 }

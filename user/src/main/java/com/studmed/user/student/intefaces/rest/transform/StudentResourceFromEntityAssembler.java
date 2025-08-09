@@ -11,13 +11,10 @@ public class StudentResourceFromEntityAssembler {
                 entity.getStudentCode(),
                 new UserResource(
                         entity.getUser().getId(),
-                        entity.getUser().getRol(),
                         entity.getUser().getFirstName(),
                         entity.getUser().getLastName(),
                         entity.getUser().getEmail(),
-                        entity.getUser().getUserName(),
                         entity.getUser().getPassword(),
-                        entity.getUser().getPhoneNumber(),
                         entity.getUser().getUserImg()));
     }
 }

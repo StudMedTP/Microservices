@@ -14,6 +14,7 @@ import java.util.Optional;
 public class UserCommandServiceImpl implements UserCommandService {
 
     private final UserRepository userRepository;
+
     public UserCommandServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -21,15 +22,11 @@ public class UserCommandServiceImpl implements UserCommandService {
     @Override
     public Long handle(CreateUserCommand command) {
         if (userRepository.existsByEmail(command.email())){
-            throw new IllegalArgumentException("User Already Exists");
+            throw new IllegalArgumentException("Ya existe un usuario con ese correo");
         }
+
         User user = new User(command);
-        try {
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error while saving user" + e.getMessage());
-        }
-        return user.getId();
+        return userRepository.save(user).getId();
     }
 
     @Override
@@ -47,13 +44,10 @@ public class UserCommandServiceImpl implements UserCommandService {
         var userToUpdate = result.get();
         try {
             var updatedUser = userRepository.save(userToUpdate.updateUser(
-                    command.rol(),
                     command.firstName(),
                     command.lastName(),
                     command.email(),
-                    command.userName(),
                     command.password(),
-                    command.phoneNumber(),
                     command.userImg()));
             return Optional.of(updatedUser);
         } catch (Exception e) {

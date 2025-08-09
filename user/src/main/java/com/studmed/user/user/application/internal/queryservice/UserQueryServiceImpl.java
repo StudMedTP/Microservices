@@ -1,5 +1,6 @@
 package com.studmed.user.user.application.internal.queryservice;
 
+import com.studmed.user.shared.exception.ResourceNotFoundException;
 import com.studmed.user.user.domain.model.aggregates.User;
 import com.studmed.user.user.domain.model.queries.GetAllUserQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByIdQuery;
@@ -21,8 +22,14 @@ public class UserQueryServiceImpl implements UserQueryService {
     }
 
     @Override
-    public Optional<User> handle(GetUserByIdQuery query) {
-        return userRepository.findById(query.id());
+    public User handle(GetUserByIdQuery query) {
+        Optional<User> userOptional = userRepository.findById(query.id());
+
+        if (userOptional.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontró usuario");
+        }
+
+        return userOptional.get();
     }
 
     @Override
@@ -32,6 +39,6 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     @Override
     public Optional<User> handle(GetUserByUsernameAndPassword query) {
-        return userRepository.findByUserNameAndPassword(query.username(), query.password());
+        return userRepository.findByEmailAndPassword(query.username(), query.password());
     }
 }
