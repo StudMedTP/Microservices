@@ -1,4 +1,4 @@
-package com.studmed.user.user.security;
+package com.studmed.user.shared.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

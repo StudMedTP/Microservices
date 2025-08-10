@@ -5,6 +5,7 @@ import com.studmed.user.student.domain.model.aggregates.Student;
 import com.studmed.user.student.domain.model.queries.GetStudentByIdQuery;
 import com.studmed.user.student.domain.service.StudentQueryService;
 import com.studmed.user.student.infraestructure.persistance.jpa.respositories.StudentRepository;
+import com.studmed.user.teacher.infraestructure.persistance.jpa.respositories.TeacherRepository;
 import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,13 @@ public class StudentQueryServiceImpl implements StudentQueryService {
 
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
+    private final TeacherRepository teacherRepository;
 
-    public StudentQueryServiceImpl(StudentRepository studentRepository, UserRepository userRepository) {
+    public StudentQueryServiceImpl(StudentRepository studentRepository, UserRepository userRepository,
+                                   TeacherRepository teacherRepository) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     @Override
@@ -31,6 +35,7 @@ public class StudentQueryServiceImpl implements StudentQueryService {
 
         Student student = studentOptional.get();
         userRepository.findById(student.getUser().getId()).ifPresent(student::setUser);
+        teacherRepository.findById(student.getTeacher().getId()).ifPresent(student::setTeacher);
 
         return student;
     }

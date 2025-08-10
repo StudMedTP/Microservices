@@ -14,7 +14,7 @@ import com.studmed.user.user.interfaces.rest.resource.*;
 import com.studmed.user.user.interfaces.rest.transform.CreateUserCommandFromResourceAssembler;
 import com.studmed.user.user.interfaces.rest.transform.UpdateUserCommandFromResourceAssembler;
 import com.studmed.user.user.interfaces.rest.transform.UserResourceFromEntityAssembler;
-import com.studmed.user.user.security.JwtUtil;
+import com.studmed.user.shared.security.JwtUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

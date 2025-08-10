@@ -7,6 +7,7 @@ public class CreateStudentCommandFromResourceAssembler {
     public static CreateStudentCommand toCommandFromResource(CreateStudentResource resource) {
         return new CreateStudentCommand(
                 resource.studentCode(),
-                resource.userId());
+                resource.userId(),
+                resource.teacherId());
     }
 }

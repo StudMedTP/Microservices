@@ -2,6 +2,7 @@ package com.studmed.user.student.intefaces.rest.transform;
 
 import com.studmed.user.student.domain.model.aggregates.Student;
 import com.studmed.user.student.intefaces.rest.resource.StudentResource;
+import com.studmed.user.teacher.interfaces.rest.resource.TeacherResourcePlain;
 import com.studmed.user.user.interfaces.rest.resource.UserResource;
 
 public class StudentResourceFromEntityAssembler {
@@ -15,6 +16,10 @@ public class StudentResourceFromEntityAssembler {
                         entity.getUser().getLastName(),
                         entity.getUser().getEmail(),
                         entity.getUser().getPassword(),
-                        entity.getUser().getUserImg()));
+                        entity.getUser().getUserImg()),
+                new TeacherResourcePlain(
+                        entity.getTeacher().getId(),
+                        entity.getTeacher().getTeacherCode()
+                ));
     }
 }

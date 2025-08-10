@@ -1,4 +1,4 @@
-package com.studmed.user.user.security;
+package com.studmed.user.shared.security;
 
 import com.studmed.user.user.domain.model.aggregates.User;
 import io.jsonwebtoken.Claims;
