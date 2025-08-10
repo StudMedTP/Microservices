@@ -8,6 +8,8 @@ import com.studmed.user.user.domain.model.aggregates.User;
 import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class StudentCommandServiceImpl implements StudentCommandService {
 
@@ -21,14 +23,17 @@ public class StudentCommandServiceImpl implements StudentCommandService {
 
     @Override
     public Long handle(CreateStudentCommand command) {
-        User user = userRepository.findById(command.userId())
-                .orElseThrow(() -> new IllegalArgumentException("Existe un error en los datos ingresados"));
+        Optional<User> userOptional = userRepository.findById(command.userId());
+
+        if (userOptional.isEmpty()) {
+            throw new IllegalArgumentException("Existe un error en los datos ingresados");
+        }
 
         if (studentRepository.existsByStudentCode(command.studentCode())) {
             throw new IllegalArgumentException("Ya existe un estudiante con ese código");
         }
 
-        Student student = new Student(command, user);
+        Student student = new Student(command, userOptional.get());
         return studentRepository.save(student).getId();
     }
 }

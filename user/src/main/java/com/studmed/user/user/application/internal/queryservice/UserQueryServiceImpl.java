@@ -5,7 +5,7 @@ import com.studmed.user.shared.exception.ResourceNotFoundException;
 import com.studmed.user.user.domain.model.aggregates.User;
 import com.studmed.user.user.domain.model.queries.GetAllUserQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByIdQuery;
-import com.studmed.user.user.domain.model.queries.GetUserByEmail;
+import com.studmed.user.user.domain.model.queries.GetUserByCredentials;
 import com.studmed.user.user.domain.service.UserQueryService;
 import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -39,8 +39,8 @@ public class UserQueryServiceImpl implements UserQueryService {
     }
 
     @Override
-    public User handle(GetUserByEmail query) {
-        Optional<User> userOptional = userRepository.findByEmail(query.username());
+    public User handle(GetUserByCredentials query) {
+        Optional<User> userOptional = userRepository.findByEmail(query.email());
 
         if (userOptional.isEmpty()) {
             throw new ResourceNotFoundException("No se encontró usuario");

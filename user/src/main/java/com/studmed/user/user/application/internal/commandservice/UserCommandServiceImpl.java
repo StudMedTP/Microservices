@@ -55,7 +55,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     @Override
     public void handle (DeleteUserCommand command) {
         if(!userRepository.existsById(command.id())) {
-            throw new IllegalArgumentException("El usuario no existe");
+            throw new IllegalArgumentException("No se encontró usuario");
         }
 
         userRepository.deleteById(command.id());

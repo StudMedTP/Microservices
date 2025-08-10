@@ -7,15 +7,13 @@ import com.studmed.user.user.domain.model.commands.DeleteUserCommand;
 import com.studmed.user.user.domain.model.commands.UpdateUserCommand;
 import com.studmed.user.user.domain.model.queries.GetAllUserQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByIdQuery;
-import com.studmed.user.user.domain.model.queries.GetUserByEmail;
+import com.studmed.user.user.domain.model.queries.GetUserByCredentials;
 import com.studmed.user.user.domain.service.UserCommandService;
 import com.studmed.user.user.domain.service.UserQueryService;
+import com.studmed.user.user.interfaces.rest.resource.*;
 import com.studmed.user.user.interfaces.rest.transform.CreateUserCommandFromResourceAssembler;
 import com.studmed.user.user.interfaces.rest.transform.UpdateUserCommandFromResourceAssembler;
 import com.studmed.user.user.interfaces.rest.transform.UserResourceFromEntityAssembler;
-import com.studmed.user.user.interfaces.rest.resource.CreateUserResource;
-import com.studmed.user.user.interfaces.rest.resource.UpdateUserResource;
-import com.studmed.user.user.interfaces.rest.resource.UserResource;
 import com.studmed.user.user.security.JwtUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,13 +51,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userResource);
     }
 
-    @GetMapping("/{email}/{password}")
-    public ResponseEntity<String> login(@PathVariable String email, @PathVariable String password) {
-        User user = userQueryService.handle(new GetUserByEmail(email, password));
+    @PostMapping("/login")
+    public ResponseEntity<TokenResource> login(@RequestBody @Valid LoginUserResource loginUserResource) {
+        User user = userQueryService.handle(new GetUserByCredentials(loginUserResource.email(), loginUserResource.password()));
 
         String tokenString = jwtUtil.generateToken(user);
 
-        return ResponseEntity.ok(tokenString);
+        TokenResource tokenResource = new TokenResource(tokenString);
+        return ResponseEntity.ok(tokenResource);
     }
 
     @GetMapping
@@ -99,6 +98,10 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        if (id <= 0) {
+            throw new BadRequestException("El ID debe ser mayor que 0");
+        }
+
         DeleteUserCommand deleteUserCommand = new DeleteUserCommand(id);
         userCommandService.handle(deleteUserCommand);
 
