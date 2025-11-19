@@ -4,6 +4,8 @@ services:
     container_name: config-service
     ports:
       - "8081:8081"
+    networks:
+      - microservices-network
     environment:
       - GIT_USER=${GIT_USER}
       - GIT_PASSWORD=${GIT_PASSWORD}
@@ -12,3 +14,83 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  eureka-service:
+    build: ./eureka-service
+    container_name: eureka-service
+    ports:
+      - "8099:8099"
+    networks:
+      - microservices-network
+    depends_on:
+      config-service:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8099/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  admin-microservices:
+    build: ./admin-microservices
+    container_name: admin-microservices
+    ports:
+      - "8086:8086"
+    networks:
+      - microservices-network
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user:
+    build: ./user
+    container_name: user
+    ports:
+      - "8093:8093"
+    networks:
+      - microservices-network
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      admin-microservices:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - JWT_SECRET=${JWT_SECRET}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - microservices-network
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      admin-microservices:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+
+networks:
+  microservices-network:
+    driver: bridge
