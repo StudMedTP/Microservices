@@ -68,6 +68,9 @@ services:
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
       - JWT_SECRET=${JWT_SECRET}
+      - SEPOLIA_RPC_URL=${SEPOLIA_RPC_URL}
+      - SEPOLIA_PRIVATE_KEY=${SEPOLIA_PRIVATE_KEY}
+      - ATTENDANCE_CONTRACT_ADDRESS=${ATTENDANCE_CONTRACT_ADDRESS}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8093/actuator/health"]
       interval: 10s
