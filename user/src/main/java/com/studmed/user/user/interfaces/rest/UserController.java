@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("User Microservice is up and running! 1.0");
+        return ResponseEntity.ok("User Microservice is up and running! 1.1");
     }
 
     @PostMapping
