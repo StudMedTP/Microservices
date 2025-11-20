@@ -1,0 +1,70 @@
+name: Ci/Cd
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    detectar-cambios:
+        runs-on: ubuntu-latest
+        outputs:
+            config: ${{ steps.filter.outputs.config }}
+            eureka: ${{ steps.filter.outputs.eureka }}
+            admin: ${{ steps.filter.outputs.admin }}
+            user: ${{ steps.filter.outputs.user }}
+            apigateway: ${{ steps.filter.outputs.apigateway }}
+        steps:
+            - name: Clonar el repositorio
+              uses: actions/checkout@v3
+
+            - name: Detectar cambios en microservicios
+              id: filter
+              uses: dorny/paths-filter@v2
+              with:
+                filters: |
+                    config: 'config-service/**'
+                    eureka: 'eureka-service/**'
+                    admin: 'admin-microservices/**'
+                    user: 'user/**'
+                    apigateway: 'api-gateway/**'
+
+    deploy-user:
+        needs: detectar-cambios
+        if: needs.detectar-cambios.outputs.user == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Clonar el repositorio
+              uses: actions/checkout@v3
+
+            - name: Construir el .jar
+              working-directory: user-microservice
+              env:
+                  ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+              run: |
+                chmod +x gradlew
+                ./gradlew clean build -x test
+
+            - name: Enviar .jar a EC2
+              uses: appleboy/scp-action@v0.1.4
+              with:
+                key: ${{ secrets.EC2_SSH_KEY }}
+                username: ${{ secrets.EC2_USER }}
+                host: ${{ secrets.EC2_HOST }}
+                source: "/home/runner/work/Microservices/Microservices/user/build/libs/user-0.0.1-SNAPSHOT.jar"
+                target: "/home/ubuntu"
+
+            - name: Conexión SSH al servidor EC2
+              uses: appleboy/ssh-action@v1.0.0
+              with:
+                key: ${{ secrets.EC2_SSH_KEY }}
+                username: ${{ secrets.EC2_USER }}
+                host: ${{ secrets.EC2_HOST }}
+                script: |
+                    cd /home/ubuntu
+                    mv ./github/workspace/user/build/libs/user-0.0.1-SNAPSHOT.jar ./Microservices/user/build/libs/
+                    rm -r github/
+                    cd Microservices
+                    docker compose up --build --detach user
+                    docker image prune -f
