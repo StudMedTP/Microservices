@@ -40,6 +40,11 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("User Microservice is up and running! 1.1");
+    }
+
     @PostMapping
     public ResponseEntity<UserResource> createUser(@RequestBody @Valid CreateUserResource createUserResource) {
         CreateUserCommand createUserCommand = CreateUserCommandFromResourceAssembler.toCommandFromResource(createUserResource);
