@@ -38,7 +38,7 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Construir el .jar
-              working-directory: user-microservice
+              working-directory: user
               env:
                   ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
                   JWT_SECRET: ${{ secrets.JWT_SECRET }}
