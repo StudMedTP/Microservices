@@ -41,9 +41,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 credentials,
                 new DefaultGasProvider()
         );
-        System.out.println(rpcUrl);
-        System.out.println(privateKey);
-        System.out.println(contractAddress);
+
         RemoteFunctionCall<TransactionReceipt> remoteFunctionCall = contract.recordAttendance(
                 BigInteger.valueOf(professorId),
                 BigInteger.valueOf(studentId),
@@ -68,9 +66,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 credentials,
                 new DefaultGasProvider()
         );
-        System.out.println(rpcUrl);
-        System.out.println(privateKey);
-        System.out.println(contractAddress);
+
         RemoteFunctionCall<List<AttendanceContract.AttendanceDTO>> remoteFunctionCall = contract.getAttendanceByStudent(
                 BigInteger.valueOf(studentId)
         );
