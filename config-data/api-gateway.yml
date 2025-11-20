@@ -61,6 +61,3 @@ springdoc:
         name: User Microservice
       - url: /soporte/v3/api-docs
         name: Soporte Microservice
-
-swagger:
-  server-type: gateway
