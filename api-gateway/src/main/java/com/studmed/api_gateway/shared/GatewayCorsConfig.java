@@ -1,4 +1,4 @@
-package com.econofood.api_gateway.shared;
+package com.studmed.api_gateway.shared;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
