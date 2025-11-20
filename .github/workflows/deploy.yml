@@ -66,5 +66,5 @@ jobs:
                     mv ./github/workspace/user/build/libs/user-0.0.1-SNAPSHOT.jar ./Microservices/user/build/libs/
                     rm -r github/
                     cd Microservices
-                    docker compose up --build --detach user
+                    docker-compose up --build -d user
                     docker image prune -f
