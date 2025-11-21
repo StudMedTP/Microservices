@@ -13,6 +13,7 @@ jobs:
             eureka: ${{ steps.filter.outputs.eureka }}
             admin: ${{ steps.filter.outputs.admin }}
             user: ${{ steps.filter.outputs.user }}
+            attendance: ${{ steps.filter.outputs.attendance }}
             apigateway: ${{ steps.filter.outputs.apigateway }}
         steps:
             - name: Clonar el repositorio
@@ -27,6 +28,7 @@ jobs:
                     eureka: 'eureka-service/**'
                     admin: 'admin-microservices/**'
                     user: 'user/**'
+                    attendance: 'attendance/**'
                     apigateway: 'api-gateway/**'
 
     deploy-user:
@@ -67,4 +69,44 @@ jobs:
                     rm -r github/
                     cd Microservices
                     docker-compose up --build -d user
+                    docker image prune -f
+
+    deploy-attendance:
+        needs: detectar-cambios
+        if: needs.detectar-cambios.outputs.attendance == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Clonar el repositorio
+              uses: actions/checkout@v3
+
+            - name: Construir el .jar
+              working-directory: attendance
+              env:
+                  ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+              run: |
+                chmod +x gradlew
+                ./gradlew clean build -x test
+
+            - name: Enviar .jar a EC2
+              uses: appleboy/scp-action@v0.1.4
+              with:
+                key: ${{ secrets.EC2_SSH_KEY }}
+                username: ${{ secrets.EC2_USER }}
+                host: ${{ secrets.EC2_HOST }}
+                source: "/home/runner/work/Microservices/Microservices/attendance/build/libs/attendance-0.0.1-SNAPSHOT.jar"
+                target: "/home/ubuntu"
+
+            - name: Conexión SSH al servidor EC2
+              uses: appleboy/ssh-action@v1.0.0
+              with:
+                key: ${{ secrets.EC2_SSH_KEY }}
+                username: ${{ secrets.EC2_USER }}
+                host: ${{ secrets.EC2_HOST }}
+                script: |
+                    cd /home/ubuntu
+                    mv ./github/workspace/attendance/build/libs/attendance-0.0.1-SNAPSHOT.jar ./Microservices/attendance/build/libs/
+                    rm -r github/
+                    cd Microservices
+                    docker-compose up --build -d attendance
                     docker image prune -f
