@@ -3,8 +3,10 @@ package com.studmed.attendance;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
+@EnableFeignClients(basePackages = "com.studmed.attendance.record.client")
 @EnableDiscoveryClient
 public class AttendanceApplication {
 

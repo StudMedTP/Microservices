@@ -1,7 +1,6 @@
 package com.studmed.attendance.record.interfaces.rest.resource;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateAttendanceResource(
@@ -10,6 +9,4 @@ public record CreateAttendanceResource(
         Long studentId,
         @NotNull()
         @Min(value = 1)
-        Long medicalCenterId,
-        @NotBlank()
-        String status) {}
+        Long medicalCenterId) {}

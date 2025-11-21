@@ -8,6 +8,6 @@ public class CreateAttendanceCommandFromResourceAssembler {
         return new CreateAttendanceCommand(
                 resource.studentId(),
                 resource.medicalCenterId(),
-                resource.status());
+                "PENDIENTE");
     }
 }
