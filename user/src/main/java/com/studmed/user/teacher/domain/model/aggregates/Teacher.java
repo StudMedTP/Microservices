@@ -24,6 +24,8 @@ public class Teacher {
 
     private String teacherCode;
 
+    private String dailyCode;
+
     @OneToOne
     @JoinColumn(name = "userId")
     private User user;
@@ -43,6 +45,7 @@ public class Teacher {
     public Teacher(CreateTeacherCommand command, User user, MedicalCenter medicalCenter, Speciality speciality, Coordinator coordinator){
         this();
         this.teacherCode = command.teacherCode();
+        this.dailyCode = null;
         this.user = user;
         this.medicalCenter = medicalCenter;
         this.speciality = speciality;

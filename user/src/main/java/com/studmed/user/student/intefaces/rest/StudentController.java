@@ -4,6 +4,7 @@ import com.studmed.user.shared.exception.BadRequestException;
 import com.studmed.user.student.domain.model.aggregates.Student;
 import com.studmed.user.student.domain.model.commands.CreateStudentCommand;
 import com.studmed.user.student.domain.model.queries.GetStudentByIdQuery;
+import com.studmed.user.student.domain.model.queries.GetStudentByUserIdQuery;
 import com.studmed.user.student.domain.service.StudentCommandService;
 import com.studmed.user.student.domain.service.StudentQueryService;
 import com.studmed.user.student.intefaces.rest.resource.CreateStudentResource;
@@ -47,6 +48,18 @@ public class StudentController {
         }
 
         Student student = studentQueryService.handle(new GetStudentByIdQuery(id));
+
+        StudentResource studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student);
+        return ResponseEntity.ok(studentResource);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<StudentResource> getStudentByUserId(@PathVariable Long id) {
+        if (id <= 0) {
+            throw new BadRequestException("El ID debe ser mayor que 0");
+        }
+
+        Student student = studentQueryService.handle(new GetStudentByUserIdQuery(id));
 
         StudentResource studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student);
         return ResponseEntity.ok(studentResource);

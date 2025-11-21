@@ -12,6 +12,7 @@ public class TeacherResourceFromEntityAssembler {
         return new TeacherResource(
                 entity.getId(),
                 entity.getTeacherCode(),
+                entity.getDailyCode(),
                 new UserResource(
                         entity.getUser().getId(),
                         entity.getUser().getFirstName(),

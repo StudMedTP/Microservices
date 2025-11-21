@@ -8,6 +8,7 @@ import com.studmed.user.user.interfaces.rest.resource.UserResource;
 public record TeacherResource(
         Long id,
         String teacherCode,
+        String dailyCode,
         UserResource userResource,
         MedicalCenterResource medicalCenterResource,
         SpecialityResource specialityResource,

@@ -7,7 +7,9 @@ import com.studmed.user.medical_center.infraestructure.persistance.jpa.resposito
 import com.studmed.user.speciality.domain.model.aggregates.Speciality;
 import com.studmed.user.speciality.infraestructure.persistance.jpa.respositories.SpecialityRepository;
 import com.studmed.user.teacher.domain.model.aggregates.Teacher;
+import com.studmed.user.teacher.domain.model.commands.CloseClassByIdCommand;
 import com.studmed.user.teacher.domain.model.commands.CreateTeacherCommand;
+import com.studmed.user.teacher.domain.model.commands.OpenClassByIdCommand;
 import com.studmed.user.teacher.domain.service.TeacherCommandService;
 import com.studmed.user.teacher.infraestructure.persistance.jpa.respositories.TeacherRepository;
 import com.studmed.user.user.domain.model.aggregates.User;
@@ -15,6 +17,7 @@ import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRe
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class TeacherCommandServiceImpl implements TeacherCommandService {
@@ -66,6 +69,38 @@ public class TeacherCommandServiceImpl implements TeacherCommandService {
         }
 
         Teacher teacher = new Teacher(command, userOptional.get(), medicalCenterOptional.get(), specialityOptional.get(), coordinatorOptional.get());
+        return teacherRepository.save(teacher).getId();
+    }
+
+    @Override
+    public Long handle(OpenClassByIdCommand command) {
+        Optional<Teacher> teacherOptional = teacherRepository.findById(command.teacherId());
+
+        if (teacherOptional.isEmpty()) {
+            throw new IllegalArgumentException("No se encontró docente");
+        }
+
+        Teacher teacher = teacherOptional.get();
+
+        Random random = new Random();
+        Long code = 1000 + random.nextLong(9000);
+        teacher.setDailyCode(String.valueOf(code));
+
+        return teacherRepository.save(teacher).getId();
+    }
+
+    @Override
+    public Long handle(CloseClassByIdCommand command) {
+        Optional<Teacher> teacherOptional = teacherRepository.findById(command.teacherId());
+
+        if (teacherOptional.isEmpty()) {
+            throw new IllegalArgumentException("No se encontró docente");
+        }
+
+        Teacher teacher = teacherOptional.get();
+
+        teacher.setDailyCode(null);
+
         return teacherRepository.save(teacher).getId();
     }
 }
