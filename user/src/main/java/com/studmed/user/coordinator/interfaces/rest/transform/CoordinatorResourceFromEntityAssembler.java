@@ -15,6 +15,6 @@ public class CoordinatorResourceFromEntityAssembler {
                         entity.getUser().getLastName(),
                         entity.getUser().getEmail(),
                         entity.getUser().getPassword(),
-                        entity.getUser().getUserImg()));
+                        entity.getUser().getRole()));
     }
 }

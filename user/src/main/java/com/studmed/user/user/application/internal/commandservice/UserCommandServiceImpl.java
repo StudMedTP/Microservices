@@ -47,7 +47,6 @@ public class UserCommandServiceImpl implements UserCommandService {
         user.setLastName(command.lastName());
         user.setEmail(command.email());
         user.setPassword(command.password());
-        user.setUserImg(command.userImg());
 
         return userRepository.save(user).getId();
     }

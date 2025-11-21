@@ -10,7 +10,6 @@ public class UpdateUserCommandFromResourceAssembler {
                 resource.firstName(),
                 resource.lastName(),
                 resource.email(),
-                resource.password(),
-                resource.userImg());
+                resource.password());
     }
 }

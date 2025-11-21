@@ -10,6 +10,6 @@ public class CreateUserCommandFromResourceAssembler {
                 resource.lastName(),
                 resource.email(),
                 resource.password(),
-                resource.userImg());
+                "STUDENT");
     }
 }

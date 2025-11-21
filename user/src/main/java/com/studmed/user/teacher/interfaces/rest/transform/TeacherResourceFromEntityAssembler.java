@@ -18,7 +18,7 @@ public class TeacherResourceFromEntityAssembler {
                         entity.getUser().getLastName(),
                         entity.getUser().getEmail(),
                         entity.getUser().getPassword(),
-                        entity.getUser().getUserImg()),
+                        entity.getUser().getRole()),
                 new MedicalCenterResource(
                         entity.getMedicalCenter().getId(),
                         entity.getMedicalCenter().getName()),

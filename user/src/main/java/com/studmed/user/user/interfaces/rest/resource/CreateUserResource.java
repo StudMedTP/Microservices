@@ -10,6 +10,4 @@ public record CreateUserResource (
         @NotBlank()
         String email,
         @NotBlank()
-        String password,
-        @NotBlank()
-        String userImg) {}
+        String password) {}

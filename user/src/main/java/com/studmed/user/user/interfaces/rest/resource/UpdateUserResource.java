@@ -10,6 +10,4 @@ public record UpdateUserResource (
         @NotBlank()
         String email,
         @NotBlank()
-        String password,
-        @NotBlank()
-        String userImg) {}
+        String password) {}

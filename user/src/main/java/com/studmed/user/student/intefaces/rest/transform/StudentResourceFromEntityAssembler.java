@@ -16,7 +16,7 @@ public class StudentResourceFromEntityAssembler {
                         entity.getUser().getLastName(),
                         entity.getUser().getEmail(),
                         entity.getUser().getPassword(),
-                        entity.getUser().getUserImg()),
+                        entity.getUser().getRole()),
                 new TeacherResourcePlain(
                         entity.getTeacher().getId(),
                         entity.getTeacher().getTeacherCode()

@@ -62,7 +62,7 @@ public class UserController {
 
         String tokenString = jwtUtil.generateToken(user);
 
-        TokenResource tokenResource = new TokenResource(tokenString);
+        TokenResource tokenResource = new TokenResource(tokenString, user.getRole());
         return ResponseEntity.ok(tokenResource);
     }
 

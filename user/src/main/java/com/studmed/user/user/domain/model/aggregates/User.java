@@ -24,7 +24,7 @@ public class User {
 
     private String password;
 
-    private String userImg;
+    private String role;
 
     public User (CreateUserCommand command){
         this();
@@ -32,6 +32,6 @@ public class User {
         this.lastName = command.lastName();
         this.email = command.email();
         this.password = command.password();
-        this.userImg = command.userImg();
+        this.role = command.role();
     }
 }
