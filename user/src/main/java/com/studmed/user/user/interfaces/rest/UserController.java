@@ -1,6 +1,7 @@
 package com.studmed.user.user.interfaces.rest;
 
 import com.studmed.user.shared.exception.BadRequestException;
+import com.studmed.user.shared.security.UserDetailsImpl;
 import com.studmed.user.user.domain.model.aggregates.User;
 import com.studmed.user.user.domain.model.commands.CreateUserCommand;
 import com.studmed.user.user.domain.model.commands.DeleteUserCommand;
@@ -16,10 +17,10 @@ import com.studmed.user.user.interfaces.rest.transform.UpdateUserCommandFromReso
 import com.studmed.user.user.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import com.studmed.user.shared.security.JwtUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class UserController {
 
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("User Microservice is up and running! 1.3");
+        return ResponseEntity.ok("User Microservice is up and running! 1.4");
     }
 
     @PostMapping
@@ -114,14 +115,8 @@ public class UserController {
     }
 
     @GetMapping("/myObject")
-    public ResponseEntity<UserResource> getUserByToken(HttpServletRequest request) {
-        Long userId = (Long) request.getAttribute("userId");
-
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        User user = userQueryService.handle(new GetUserByIdQuery(userId));
+    public ResponseEntity<UserResource> getUserByToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userQueryService.handle(new GetUserByIdQuery(userDetails.id()));
 
         UserResource userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user);
         return ResponseEntity.ok(userResource);
