@@ -28,7 +28,9 @@ spring:
         - id: attendance
           uri: lb://attendance
           predicates:
-            - Path=/api/v1/attendances/**
+            - Path=/microservice-attendance/attendances/**
+          filters:
+            - RewritePath=/microservice-attendance/attendances, /attendances
 
         - id: soporte
           uri: lb://soporte
@@ -49,6 +51,12 @@ spring:
             - Path=/soporte/v3/api-docs
           filters:
             - RewritePath=/soporte/v3/api-docs, /v3/api-docs
+        - id: attendance-swagger
+          uri: lb://attendance
+          predicates:
+            - Path=/attendance/v3/api-docs
+          filters:
+            - RewritePath=/attendance/v3/api-docs, /v3/api-docs
 
 springdoc:
   api-docs:
@@ -61,3 +69,5 @@ springdoc:
         name: User Microservice
       - url: /soporte/v3/api-docs
         name: Soporte Microservice
+      - url: /attendance/v3/api-docs
+        name: Attendance Microservice
