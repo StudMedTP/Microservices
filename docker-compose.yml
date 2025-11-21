@@ -77,6 +77,29 @@ services:
       timeout: 5s
       retries: 5
 
+  attendance:
+    build: ./attendance
+    container_name: attendance
+    ports:
+      - "8094:8094"
+    networks:
+      - microservices-network
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      admin-microservices:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - JWT_SECRET=${JWT_SECRET}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8094/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   api-gateway:
     build: ./api-gateway
     container_name: api-gateway
