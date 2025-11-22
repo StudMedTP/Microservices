@@ -24,6 +24,36 @@ spring:
             - Path=/microservice-user/users/**
           filters:
             - RewritePath=/microservice-user/users, /users
+        - id: speciality
+          uri: lb://user
+          predicates:
+            - Path=/microservice-speciality/specialities/**
+          filters:
+            - RewritePath=/microservice-speciality/specialities, /specialities
+        - id: coordinator
+          uri: lb://user
+          predicates:
+            - Path=/microservice-coordinator/coordinators/**
+          filters:
+            - RewritePath=/microservice-coordinator/coordinators, /coordinators
+        - id: student
+          uri: lb://user
+          predicates:
+            - Path=/microservice-student/students/**
+          filters:
+            - RewritePath=/microservice-student/students, /students
+        - id: teacher
+          uri: lb://user
+          predicates:
+            - Path=/microservice-teacher/teachers/**
+          filters:
+            - RewritePath=/microservice-teacher/teachers, /teachers
+        - id: medical-center
+          uri: lb://user
+          predicates:
+            - Path=/microservice-medical-center/medical-centers/**
+          filters:
+            - RewritePath=/microservice-medical-center/medical-centers, /medical-centers
 
         - id: attendance
           uri: lb://attendance
@@ -31,6 +61,12 @@ spring:
             - Path=/microservice-attendance/attendances/**
           filters:
             - RewritePath=/microservice-attendance/attendances, /attendances
+        - id: blockchain
+          uri: lb://attendance
+          predicates:
+            - Path=/microservice-blockchain/blockchains/**
+          filters:
+            - RewritePath=/microservice-blockchain/blockchains, /blockchains
 
         - id: soporte
           uri: lb://soporte
