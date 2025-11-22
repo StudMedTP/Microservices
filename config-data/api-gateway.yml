@@ -27,33 +27,33 @@ spring:
         - id: speciality
           uri: lb://user
           predicates:
-            - Path=/microservice-speciality/specialities/**
+            - Path=/microservice-user/specialities/**
           filters:
-            - RewritePath=/microservice-speciality/specialities, /specialities
+            - RewritePath=/microservice-user/specialities, /specialities
         - id: coordinator
           uri: lb://user
           predicates:
-            - Path=/microservice-coordinator/coordinators/**
+            - Path=/microservice-user/coordinators/**
           filters:
-            - RewritePath=/microservice-coordinator/coordinators, /coordinators
+            - RewritePath=/microservice-user/coordinators, /coordinators
         - id: student
           uri: lb://user
           predicates:
-            - Path=/microservice-student/students/**
+            - Path=/microservice-user/students/**
           filters:
-            - RewritePath=/microservice-student/students, /students
+            - RewritePath=/microservice-user/students, /students
         - id: teacher
           uri: lb://user
           predicates:
-            - Path=/microservice-teacher/teachers/**
+            - Path=/microservice-user/teachers/**
           filters:
-            - RewritePath=/microservice-teacher/teachers, /teachers
+            - RewritePath=/microservice-user/teachers, /teachers
         - id: medical-center
           uri: lb://user
           predicates:
-            - Path=/microservice-medical-center/medical-centers/**
+            - Path=/microservice-user/medical-centers/**
           filters:
-            - RewritePath=/microservice-medical-center/medical-centers, /medical-centers
+            - RewritePath=/microservice-user/medical-centers, /medical-centers
 
         - id: attendance
           uri: lb://attendance
@@ -64,9 +64,9 @@ spring:
         - id: blockchain
           uri: lb://attendance
           predicates:
-            - Path=/microservice-blockchain/blockchains/**
+            - Path=/microservice-attendance/blockchains/**
           filters:
-            - RewritePath=/microservice-blockchain/blockchains, /blockchains
+            - RewritePath=/microservice-attendance/blockchains, /blockchains
 
         - id: soporte
           uri: lb://soporte
