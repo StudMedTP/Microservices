@@ -71,6 +71,22 @@ jobs:
                     docker-compose up --build -d user
                     docker image prune -f
 
+            - name: Notificación en Discord
+              if: success()
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+              uses: Ilshidur/action-discord@master
+              with:
+                args: "Despliegue exitoso en *user-microservice*"
+
+            - name: Notificación en Discord (fallo)
+              if: failure()
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+              uses: Ilshidur/action-discord@master
+              with:
+                args: 'El despliegue en *user-microservice* ha fallado'
+
     deploy-attendance:
         needs: detectar-cambios
         if: needs.detectar-cambios.outputs.attendance == 'true'
@@ -110,3 +126,19 @@ jobs:
                     cd Microservices
                     docker-compose up --build -d attendance
                     docker image prune -f
+
+            - name: Notificación en Discord
+              if: success()
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+              uses: Ilshidur/action-discord@master
+              with:
+                args: "Despliegue exitoso en *user-microservice*"
+
+            - name: Notificación en Discord (fallo)
+              if: failure()
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+              uses: Ilshidur/action-discord@master
+              with:
+                args: 'El despliegue en *user-microservice* ha fallado'
