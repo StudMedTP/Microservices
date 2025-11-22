@@ -2,6 +2,7 @@ package com.studmed.user.student.application.internal.queryService;
 
 import com.studmed.user.shared.exception.ResourceNotFoundException;
 import com.studmed.user.student.domain.model.aggregates.Student;
+import com.studmed.user.student.domain.model.queries.GetAllStudentsByTeacherIdQuery;
 import com.studmed.user.student.domain.model.queries.GetStudentByIdQuery;
 import com.studmed.user.student.domain.model.queries.GetStudentByUserIdQuery;
 import com.studmed.user.student.domain.service.StudentQueryService;
@@ -10,6 +11,7 @@ import com.studmed.user.teacher.infraestructure.persistance.jpa.respositories.Te
 import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,5 +56,10 @@ public class StudentQueryServiceImpl implements StudentQueryService {
         teacherRepository.findById(student.getTeacher().getId()).ifPresent(student::setTeacher);
 
         return student;
+    }
+
+    @Override
+    public List<Student> handle(GetAllStudentsByTeacherIdQuery query) {
+        return studentRepository.findByTeacher_User_Id(query.id());
     }
 }
