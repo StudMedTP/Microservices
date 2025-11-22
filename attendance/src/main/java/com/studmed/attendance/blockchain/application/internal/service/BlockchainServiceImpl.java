@@ -1,8 +1,8 @@
-package com.studmed.attendance.attendance.application.internal.service;
+package com.studmed.attendance.blockchain.application.internal.service;
 
-import com.studmed.attendance.attendance.domain.model.BlockchainAttendance;
-import com.studmed.attendance.attendance.domain.model.BlockchainAttendanceContract;
-import com.studmed.attendance.attendance.domain.service.BlockchainService;
+import com.studmed.attendance.blockchain.domain.model.BlockchainAttendance;
+import com.studmed.attendance.blockchain.domain.model.BlockchainAttendanceContract;
+import com.studmed.attendance.blockchain.domain.service.BlockchainService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
@@ -32,7 +32,7 @@ public class BlockchainServiceImpl implements BlockchainService {
     private BlockchainAttendanceContract contract;
 
     @Override
-    public TransactionReceipt recordAttendance(long professorId, long studentId, long latitude, long longitude) {
+    public TransactionReceipt recordAttendance(long professorId, long studentId, Double latitude, Double longitude) {
         Web3j web3j = Web3j.build(new HttpService(rpcUrl));
         Credentials credentials = Credentials.create(privateKey);
         contract = BlockchainAttendanceContract.load(
@@ -45,8 +45,8 @@ public class BlockchainServiceImpl implements BlockchainService {
         RemoteFunctionCall<TransactionReceipt> remoteFunctionCall = contract.recordAttendance(
                 BigInteger.valueOf(professorId),
                 BigInteger.valueOf(studentId),
-                BigInteger.valueOf(latitude),
-                BigInteger.valueOf(longitude)
+                BigInteger.valueOf((long) (latitude * 1_000_000)),
+                BigInteger.valueOf((long) (longitude * 1_000_000))
         );
 
         try {
@@ -79,8 +79,8 @@ public class BlockchainServiceImpl implements BlockchainService {
                 result.add(new BlockchainAttendance(
                         record.professorId.longValue(),
                         record.studentId.longValue(),
-                        record.latitude.longValue(),
-                        record.longitude.longValue(),
+                        record.latitude.doubleValue() / 1_000_000,
+                        record.longitude.doubleValue() / 1_000_000,
                         Instant.ofEpochSecond(record.timestamp.longValue()).toString()
                 ));
             }

@@ -1,7 +1,7 @@
-package com.studmed.attendance.attendance.interfaces.rest;
+package com.studmed.attendance.blockchain.interfaces.rest;
 
-import com.studmed.attendance.attendance.domain.model.BlockchainAttendance;
-import com.studmed.attendance.attendance.domain.service.BlockchainService;
+import com.studmed.attendance.blockchain.domain.model.BlockchainAttendance;
+import com.studmed.attendance.blockchain.domain.service.BlockchainService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class BlockchainController {
     }
 
     @PostMapping("/{professorId}/{studentId}/{latitude}/{longitude}")
-    public ResponseEntity<TransactionReceipt> recordAttendance(@PathVariable Long professorId, @PathVariable Long studentId, @PathVariable Long latitude, @PathVariable Long longitude) {
+    public ResponseEntity<TransactionReceipt> recordAttendance(@PathVariable Long professorId, @PathVariable Long studentId, @PathVariable Double latitude, @PathVariable Double longitude) {
         TransactionReceipt receipt = blockchainService.recordAttendance(professorId, studentId, latitude, longitude);
         return ResponseEntity.status(HttpStatus.CREATED).body(receipt);
     }

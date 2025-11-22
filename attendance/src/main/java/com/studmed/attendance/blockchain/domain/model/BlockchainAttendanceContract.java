@@ -1,4 +1,4 @@
-package com.studmed.attendance.attendance.domain.model;
+package com.studmed.attendance.blockchain.domain.model;
 
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.DynamicArray;
