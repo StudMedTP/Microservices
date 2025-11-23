@@ -125,13 +125,20 @@ public class AttendanceController {
     public ResponseEntity<Map<String, AttendanceResource>> getLastAttendanceByStudentId(@PathVariable Long id) {
         Attendance attendance = attendanceQueryService.handle(new GetLastAttendanceByStudentIdQuery(id));
 
-        List<BlockchainAttendance> attendances = blockchainService.getByAttendance(attendance.getId());
+        if (attendance.getStatus().equals("PENDIENTE")) {
+            AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
 
-        BlockchainAttendance lastAttendance = attendances.getLast();
+            Map<String, AttendanceResource> response = Map.of("attendance", attendanceResource);
+            return ResponseEntity.ok(response);
+        } else {
+            List<BlockchainAttendance> attendances = blockchainService.getByAttendance(attendance.getId());
 
-        AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceWithCoordinatesFromEntity(attendance, lastAttendance.latitude, lastAttendance.longitude);
+            BlockchainAttendance lastAttendance = attendances.getLast();
 
-        Map<String, AttendanceResource> response = Map.of("attendance", attendanceResource);
-        return ResponseEntity.ok(response);
+            AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceWithCoordinatesFromEntity(attendance, lastAttendance.latitude, lastAttendance.longitude);
+
+            Map<String, AttendanceResource> response = Map.of("attendance", attendanceResource);
+            return ResponseEntity.ok(response);
+        }
     }
 }
