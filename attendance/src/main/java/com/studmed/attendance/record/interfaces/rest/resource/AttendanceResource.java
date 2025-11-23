@@ -6,5 +6,7 @@ public record AttendanceResource(Long id,
                                  Long studentId,
                                  Long medicalCenterId,
                                  String status,
+                                 StudentResource studentResource,
+                                 MedicalCenterResource medicalCenterResource,
                                  Date createdAt,
                                  Date updatedAt) {}

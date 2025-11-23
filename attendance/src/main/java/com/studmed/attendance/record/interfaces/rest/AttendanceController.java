@@ -10,6 +10,7 @@ import com.studmed.attendance.record.domain.model.queries.GetAttendanceByIdQuery
 import com.studmed.attendance.record.domain.service.AttendanceCommandService;
 import com.studmed.attendance.record.domain.service.AttendanceQueryService;
 import com.studmed.attendance.record.interfaces.rest.resource.AttendanceResource;
+import com.studmed.attendance.record.interfaces.rest.resource.AttendanceResourcePlain;
 import com.studmed.attendance.record.interfaces.rest.resource.UpdateAttendanceResource;
 import com.studmed.attendance.record.interfaces.rest.transform.CreateAttendanceCommandFromResourceAssembler;
 import com.studmed.attendance.record.interfaces.rest.transform.AttendanceResourceFromEntityAssembler;
@@ -42,42 +43,42 @@ public class AttendanceController {
 
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("Attendance Microservice is up and running! 1.5");
+        return ResponseEntity.ok("Attendance Microservice is up and running! 1.6");
     }
 
     @PostMapping
-    public ResponseEntity<AttendanceResource> createAttendance(@RequestBody @Valid CreateAttendanceResource createAttendanceResource){
+    public ResponseEntity<AttendanceResourcePlain> createAttendance(@RequestBody @Valid CreateAttendanceResource createAttendanceResource){
         CreateAttendanceCommand createAttendanceCommand = CreateAttendanceCommandFromResourceAssembler.toCommandFromResource(createAttendanceResource);
         Long id = attendanceCommandService.handle(createAttendanceCommand);
 
         Attendance attendance = attendanceQueryService.handle(new GetAttendanceByIdQuery(id));
 
-        AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
+        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
         return ResponseEntity.status(HttpStatus.CREATED).body(attendanceResource);
     }
 
     @GetMapping
-    public ResponseEntity<List<AttendanceResource>> getAllAttendances(){
+    public ResponseEntity<List<AttendanceResourcePlain>> getAllAttendances(){
         List<Attendance> attendances = attendanceQueryService.handle(new GetAllAttendanceQuery());
 
-        List<AttendanceResource> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourceFromEntity).toList();
+        List<AttendanceResourcePlain> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(attendanceResources);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AttendanceResource> getAttendanceById(@PathVariable Long id){
+    public ResponseEntity<AttendanceResourcePlain> getAttendanceById(@PathVariable Long id){
         if (id <= 0) {
             throw new BadRequestException("El ID debe ser mayor que 0");
         }
 
         Attendance attendance = attendanceQueryService.handle(new GetAttendanceByIdQuery(id));
 
-        AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
+        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
         return ResponseEntity.ok(attendanceResource);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AttendanceResource> updateAttendance(@PathVariable Long id, @RequestBody @Valid UpdateAttendanceResource updateAttendanceResource){
+    public ResponseEntity<AttendanceResourcePlain> updateAttendance(@PathVariable Long id, @RequestBody @Valid UpdateAttendanceResource updateAttendanceResource){
         if (id <= 0) {
             throw new BadRequestException("El ID debe ser mayor que 0");
         }
@@ -87,7 +88,7 @@ public class AttendanceController {
 
         Attendance attendance = attendanceQueryService.handle(new GetAttendanceByIdQuery(attendanceId));
 
-        AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
+        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
         return ResponseEntity.ok(attendanceResource);
     }
 
@@ -107,7 +108,7 @@ public class AttendanceController {
     public ResponseEntity<Map<String, List<AttendanceResource>>> getAttendancesByToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<Attendance> attendances = attendanceQueryService.handle(new GetAllAttendanceByUserIdQuery(userDetails.id()));
 
-        List<AttendanceResource> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourceFromEntity).toList();
+        List<AttendanceResource> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourcePlainFromEntity).toList();
 
         Map<String, List<AttendanceResource>> response = Map.of("attendances", attendanceResources);
         return ResponseEntity.ok(response);

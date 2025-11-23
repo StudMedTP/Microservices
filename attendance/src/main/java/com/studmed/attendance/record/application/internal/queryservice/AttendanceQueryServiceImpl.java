@@ -2,6 +2,7 @@ package com.studmed.attendance.record.application.internal.queryservice;
 
 import com.studmed.attendance.record.client.UserClient;
 import com.studmed.attendance.record.domain.model.aggregates.Attendance;
+import com.studmed.attendance.record.domain.model.client.MedicalCenterResource;
 import com.studmed.attendance.record.domain.model.client.StudentResource;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceQuery;
@@ -48,7 +49,26 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
             StudentResource studentResource = userClient.getStudentByUserId(query.userId()).getBody();
 
             if (studentResource != null) {
-                return attendanceRepository.findAllByStatusAndStudentId("PENDIENTE", studentResource.getId());
+                List<Attendance> attendances = attendanceRepository.findAllByStatusAndStudentId("PENDIENTE", studentResource.getId());
+
+                attendances.forEach((attendance) -> {
+                    try {
+                        StudentResource studentResourceAttendance = userClient.getStudentById(attendance.getStudentId()).getBody();
+                        attendance.setStudent(studentResourceAttendance);
+                    } catch (Exception e) {
+                        StudentResource studentResourceAttendance = StudentResource.builder().build();
+                        attendance.setStudent(studentResourceAttendance);
+                    }
+
+                    try {
+                        MedicalCenterResource medicalCenterResourceAttendance = userClient.getMedicalCenterById(attendance.getMedicalCenterId()).getBody();
+                        attendance.setMedicalCenter(medicalCenterResourceAttendance);
+                    } catch (Exception e) {
+                        MedicalCenterResource medicalCenterResourceAttendance = MedicalCenterResource.builder().build();
+                        attendance.setMedicalCenter(medicalCenterResourceAttendance);
+                    }
+                });
+                return attendances;
             } else {
                 throw new RuntimeException("Error al validar estudiante.");
             }

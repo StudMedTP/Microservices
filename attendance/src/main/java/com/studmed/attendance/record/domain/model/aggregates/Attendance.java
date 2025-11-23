@@ -1,5 +1,7 @@
 package com.studmed.attendance.record.domain.model.aggregates;
 
+import com.studmed.attendance.record.domain.model.client.MedicalCenterResource;
+import com.studmed.attendance.record.domain.model.client.StudentResource;
 import com.studmed.attendance.record.domain.model.commands.CreateAttendanceCommand;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,8 +25,14 @@ public class Attendance {
     @Column(name = "student_id")
     private Long studentId;
 
+    @Transient
+    private StudentResource student;
+
     @Column(name = "medical_center_id")
     private Long medicalCenterId;
+
+    @Transient
+    private MedicalCenterResource medicalCenter;
 
     private String status;
 
