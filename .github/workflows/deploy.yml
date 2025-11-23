@@ -133,7 +133,7 @@ jobs:
                 DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
               uses: Ilshidur/action-discord@master
               with:
-                args: "Despliegue exitoso en *user-microservice*"
+                args: "Despliegue exitoso en *attendance-microservice*"
 
             - name: Notificación en Discord (fallo)
               if: failure()
@@ -141,4 +141,4 @@ jobs:
                 DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
               uses: Ilshidur/action-discord@master
               with:
-                args: 'El despliegue en *user-microservice* ha fallado'
+                args: 'El despliegue en *attendance-microservice* ha fallado'

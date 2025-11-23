@@ -21,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/students")
@@ -71,10 +72,12 @@ public class StudentController {
     }
 
     @GetMapping("/teacher/myObject")
-    public ResponseEntity<List<StudentResource>> getAllStudentByTeacherToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<Map<String, List<StudentResource>>> getAllStudentByTeacherToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<Student> students = studentQueryService.handle(new GetAllStudentsByTeacherIdQuery(userDetails.id()));
 
         List<StudentResource> studentsResource = students.stream().map(StudentResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(studentsResource);
+
+        Map<String, List<StudentResource>> response = Map.of("students", studentsResource);
+        return ResponseEntity.ok(response);
     }
 }
