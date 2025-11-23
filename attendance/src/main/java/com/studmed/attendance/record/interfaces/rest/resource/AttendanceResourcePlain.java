@@ -1,5 +1,6 @@
 package com.studmed.attendance.record.interfaces.rest.resource;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public record AttendanceResourcePlain(Long id,
@@ -7,4 +8,5 @@ public record AttendanceResourcePlain(Long id,
                                       Long medicalCenterId,
                                       String status,
                                       Date createdAt,
-                                      Date updatedAt) {}
+                                      Date updatedAt,
+                                      LocalDateTime date) {}

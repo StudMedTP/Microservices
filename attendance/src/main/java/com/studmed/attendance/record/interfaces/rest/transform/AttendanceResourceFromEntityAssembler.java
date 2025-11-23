@@ -24,6 +24,7 @@ public class AttendanceResourceFromEntityAssembler {
                 ),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
+                entity.getDate(),
                 0.0,
                 0.0);
     }
@@ -45,6 +46,7 @@ public class AttendanceResourceFromEntityAssembler {
                 ),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
+                entity.getDate(),
                 latitude,
                 longitude);
     }
@@ -56,6 +58,7 @@ public class AttendanceResourceFromEntityAssembler {
                 entity.getMedicalCenterId(),
                 entity.getStatus(),
                 entity.getCreatedAt(),
-                entity.getUpdatedAt());
+                entity.getUpdatedAt(),
+                entity.getDate());
     }
 }

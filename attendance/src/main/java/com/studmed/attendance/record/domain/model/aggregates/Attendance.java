@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -44,10 +45,13 @@ public class Attendance {
     @UpdateTimestamp
     private Date updatedAt;
 
+    private LocalDateTime date;
+
     public Attendance(CreateAttendanceCommand command){
         this();
         this.studentId = command.studentId();
         this.medicalCenterId = command.medicalCenterId();
         this.status = command.status();
+        this.date = command.date();
     }
 }
