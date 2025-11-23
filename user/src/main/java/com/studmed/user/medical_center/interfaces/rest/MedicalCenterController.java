@@ -1,5 +1,6 @@
 package com.studmed.user.medical_center.interfaces.rest;
 
+import com.studmed.user.medical_center.domain.model.queries.GetAllMedicalCenters;
 import com.studmed.user.shared.exception.BadRequestException;
 import com.studmed.user.medical_center.domain.model.aggregates.MedicalCenter;
 import com.studmed.user.medical_center.domain.model.commands.CreateMedicalCenterCommand;
@@ -15,6 +16,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/medical-centers")
@@ -38,6 +41,14 @@ public class MedicalCenterController {
 
         MedicalCenterResource medicalCenterResource = MedicalCenterResourceFromEntityAssembler.toResourceFromEntity(medicalCenter);
         return ResponseEntity.status(HttpStatus.CREATED).body(medicalCenterResource);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MedicalCenterResource>> getAllMedicalCenters() {
+        List<MedicalCenter> medicalCenters = medicalCenterQueryService.handle(new GetAllMedicalCenters());
+
+        List<MedicalCenterResource> medicalCenterResources = medicalCenters.stream().map(MedicalCenterResourceFromEntityAssembler::toResourceFromEntity).toList();
+        return ResponseEntity.ok(medicalCenterResources);
     }
 
     @GetMapping("/{id}")
