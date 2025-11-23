@@ -25,6 +25,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/attendances")
@@ -41,7 +42,7 @@ public class AttendanceController {
 
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("Attendance Microservice is up and running! 1.4");
+        return ResponseEntity.ok("Attendance Microservice is up and running! 1.5");
     }
 
     @PostMapping
@@ -103,10 +104,12 @@ public class AttendanceController {
     }
 
     @GetMapping("/myObject")
-    public ResponseEntity<List<AttendanceResource>> getAttendancesByToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<Map<String, List<AttendanceResource>>> getAttendancesByToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<Attendance> attendances = attendanceQueryService.handle(new GetAllAttendanceByUserIdQuery(userDetails.id()));
 
         List<AttendanceResource> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(attendanceResources);
+
+        Map<String, List<AttendanceResource>> response = Map.of("attendances", attendanceResources);
+        return ResponseEntity.ok(response);
     }
 }
