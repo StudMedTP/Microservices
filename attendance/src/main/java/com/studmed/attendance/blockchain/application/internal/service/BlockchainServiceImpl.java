@@ -32,7 +32,7 @@ public class BlockchainServiceImpl implements BlockchainService {
     private BlockchainAttendanceContract contract;
 
     @Override
-    public TransactionReceipt recordAttendance(long professorId, long studentId, Double latitude, Double longitude) {
+    public TransactionReceipt recordAttendance(long attendanceId, long professorId, long studentId, Double latitude, Double longitude) {
         Web3j web3j = Web3j.build(new HttpService(rpcUrl));
         Credentials credentials = Credentials.create(privateKey);
         contract = BlockchainAttendanceContract.load(
@@ -43,6 +43,7 @@ public class BlockchainServiceImpl implements BlockchainService {
         );
 
         RemoteFunctionCall<TransactionReceipt> remoteFunctionCall = contract.recordAttendance(
+                BigInteger.valueOf(attendanceId),
                 BigInteger.valueOf(professorId),
                 BigInteger.valueOf(studentId),
                 BigInteger.valueOf((long) (latitude * 1_000_000)),
@@ -69,6 +70,41 @@ public class BlockchainServiceImpl implements BlockchainService {
 
         RemoteFunctionCall<List<BlockchainAttendanceContract.AttendanceDTO>> remoteFunctionCall = contract.getAttendanceByStudent(
                 BigInteger.valueOf(studentId)
+        );
+
+        try {
+            List<BlockchainAttendanceContract.AttendanceDTO> records = remoteFunctionCall.send();
+
+            List<BlockchainAttendance> result = new ArrayList<>();
+            for (BlockchainAttendanceContract.AttendanceDTO record : records) {
+                result.add(new BlockchainAttendance(
+                        record.professorId.longValue(),
+                        record.studentId.longValue(),
+                        record.latitude.doubleValue() / 1_000_000,
+                        record.longitude.doubleValue() / 1_000_000,
+                        Instant.ofEpochSecond(record.timestamp.longValue()).toString()
+                ));
+            }
+
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to call blockchain: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<BlockchainAttendance> getByAttendance(long attendanceId) {
+        Web3j web3j = Web3j.build(new HttpService(rpcUrl));
+        Credentials credentials = Credentials.create(privateKey);
+        contract = BlockchainAttendanceContract.load(
+                contractAddress,
+                web3j,
+                credentials,
+                new DefaultGasProvider()
+        );
+
+        RemoteFunctionCall<List<BlockchainAttendanceContract.AttendanceDTO>> remoteFunctionCall = contract.getAttendanceByAttendance(
+                BigInteger.valueOf(attendanceId)
         );
 
         try {

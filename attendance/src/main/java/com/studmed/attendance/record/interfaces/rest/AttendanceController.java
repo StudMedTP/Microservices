@@ -1,5 +1,7 @@
 package com.studmed.attendance.record.interfaces.rest;
 
+import com.studmed.attendance.blockchain.domain.model.BlockchainAttendance;
+import com.studmed.attendance.blockchain.domain.service.BlockchainService;
 import com.studmed.attendance.record.domain.model.aggregates.Attendance;
 import com.studmed.attendance.record.domain.model.commands.CreateAttendanceCommand;
 import com.studmed.attendance.record.domain.model.commands.DeleteAttendanceCommand;
@@ -37,14 +39,18 @@ public class AttendanceController {
     private final AttendanceCommandService attendanceCommandService;
     private final AttendanceQueryService attendanceQueryService;
 
-    public AttendanceController(AttendanceCommandService attendanceCommandService, AttendanceQueryService attendanceQueryService){
+    private final BlockchainService blockchainService;
+
+    public AttendanceController(AttendanceCommandService attendanceCommandService, AttendanceQueryService attendanceQueryService,
+                                BlockchainService blockchainService){
         this.attendanceCommandService = attendanceCommandService;
         this.attendanceQueryService = attendanceQueryService;
+        this.blockchainService = blockchainService;
     }
 
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("Attendance Microservice is up and running! 1.6");
+        return ResponseEntity.ok("Attendance Microservice is up and running! 1.7");
     }
 
     @PostMapping
@@ -116,10 +122,14 @@ public class AttendanceController {
     }
 
     @GetMapping("/lastByStudentId/{id}")
-    public ResponseEntity<Map<String, AttendanceResource>> getAttendancesByToken(@PathVariable Long id) {
+    public ResponseEntity<Map<String, AttendanceResource>> getLastAttendanceByStudentId(@PathVariable Long id) {
         Attendance attendance = attendanceQueryService.handle(new GetLastAttendanceByStudentIdQuery(id));
 
-        AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
+        List<BlockchainAttendance> attendances = blockchainService.getByAttendance(attendance.getId());
+
+        BlockchainAttendance lastAttendance = attendances.getLast();
+
+        AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceWithCoordinatesFromEntity(attendance, lastAttendance.latitude, lastAttendance.longitude);
 
         Map<String, AttendanceResource> response = Map.of("attendance", attendanceResource);
         return ResponseEntity.ok(response);

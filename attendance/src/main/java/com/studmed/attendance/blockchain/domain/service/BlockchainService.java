@@ -6,6 +6,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import java.util.List;
 
 public interface BlockchainService {
-    TransactionReceipt recordAttendance(long professorId, long studentId, Double latitude, Double longitude);
+    TransactionReceipt recordAttendance(long attendanceId, long professorId, long studentId, Double latitude, Double longitude);
     List<BlockchainAttendance> getByStudent(long studentId);
+    List<BlockchainAttendance> getByAttendance(long attendanceId);
 }

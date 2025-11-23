@@ -9,4 +9,6 @@ public record AttendanceResource(Long id,
                                  StudentResource studentResource,
                                  MedicalCenterResource medicalCenterResource,
                                  Date createdAt,
-                                 Date updatedAt) {}
+                                 Date updatedAt,
+                                 Double latitude,
+                                 Double longitude) {}

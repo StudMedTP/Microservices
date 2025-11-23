@@ -21,15 +21,21 @@ public class BlockchainController {
         this.blockchainService = blockchainService;
     }
 
-    @PostMapping("/{professorId}/{studentId}/{latitude}/{longitude}")
-    public ResponseEntity<TransactionReceipt> recordAttendance(@PathVariable Long professorId, @PathVariable Long studentId, @PathVariable Double latitude, @PathVariable Double longitude) {
-        TransactionReceipt receipt = blockchainService.recordAttendance(professorId, studentId, latitude, longitude);
+    @PostMapping("/{attendanceId}/{professorId}/{studentId}/{latitude}/{longitude}")
+    public ResponseEntity<TransactionReceipt> recordAttendance(@PathVariable Long attendanceId, @PathVariable Long professorId, @PathVariable Long studentId, @PathVariable Double latitude, @PathVariable Double longitude) {
+        TransactionReceipt receipt = blockchainService.recordAttendance(attendanceId, professorId, studentId, latitude, longitude);
         return ResponseEntity.status(HttpStatus.CREATED).body(receipt);
     }
 
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<BlockchainAttendance>> getByStudent(@PathVariable Long studentId) {
         List<BlockchainAttendance> attendances = blockchainService.getByStudent(studentId);
+        return ResponseEntity.ok(attendances);
+    }
+
+    @GetMapping("/attendance/{attendanceId}")
+    public ResponseEntity<List<BlockchainAttendance>> getByAttendance(@PathVariable Long attendanceId) {
+        List<BlockchainAttendance> attendances = blockchainService.getByAttendance(attendanceId);
         return ResponseEntity.ok(attendances);
     }
 }

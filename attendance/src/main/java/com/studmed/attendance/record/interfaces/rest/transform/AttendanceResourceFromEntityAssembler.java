@@ -23,7 +23,30 @@ public class AttendanceResourceFromEntityAssembler {
                         entity.getMedicalCenter().getName()
                 ),
                 entity.getCreatedAt(),
-                entity.getUpdatedAt());
+                entity.getUpdatedAt(),
+                0.0,
+                0.0);
+    }
+
+    public static AttendanceResource toResourceWithCoordinatesFromEntity(Attendance entity, Double latitude, Double longitude) {
+        return new AttendanceResource(
+                entity.getId(),
+                entity.getStudentId(),
+                entity.getMedicalCenterId(),
+                entity.getStatus(),
+                new StudentResource(
+                        entity.getStudent().getId(),
+                        entity.getStudent().getStudentCode(),
+                        entity.getStudent().getTeacherId()
+                ),
+                new MedicalCenterResource(
+                        entity.getMedicalCenter().getId(),
+                        entity.getMedicalCenter().getName()
+                ),
+                entity.getCreatedAt(),
+                entity.getUpdatedAt(),
+                latitude,
+                longitude);
     }
 
     public static AttendanceResourcePlain toResourcePlainFromEntity(Attendance entity) {

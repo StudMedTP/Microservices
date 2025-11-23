@@ -24,15 +24,17 @@ public class BlockchainAttendanceContract extends Contract {
     public static final String BINARY = "";
 
     public static class AttendanceDTO extends StaticStruct {
+        public BigInteger attendanceId;
         public BigInteger professorId;
         public BigInteger studentId;
         public BigInteger latitude;
         public BigInteger longitude;
         public BigInteger timestamp;
 
-        public AttendanceDTO(Uint256 professorId, Uint256 studentId, Int256 latitude,
+        public AttendanceDTO(Uint256 attendanceId, Uint256 professorId, Uint256 studentId, Int256 latitude,
                              Int256 longitude, Uint256 timestamp) {
-            super(professorId, studentId, latitude, longitude, timestamp);
+            super(attendanceId, professorId, studentId, latitude, longitude, timestamp);
+            this.attendanceId = attendanceId.getValue();
             this.professorId = professorId.getValue();
             this.studentId = studentId.getValue();
             this.latitude = latitude.getValue();
@@ -49,10 +51,10 @@ public class BlockchainAttendanceContract extends Contract {
         return new BlockchainAttendanceContract(contractAddress, web3j, credentials, gasProvider);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> recordAttendance(BigInteger professorId, BigInteger studentId, BigInteger latitude, BigInteger longitude) {
+    public RemoteFunctionCall<TransactionReceipt> recordAttendance(BigInteger attendanceId, BigInteger professorId, BigInteger studentId, BigInteger latitude, BigInteger longitude) {
         final Function function = new Function(
                 "recordAttendance",
-                Arrays.asList(new Uint256(professorId), new Uint256(studentId), new Int256(latitude), new Int256(longitude)),
+                Arrays.asList(new Uint256(attendanceId), new Uint256(professorId), new Uint256(studentId), new Int256(latitude), new Int256(longitude)),
                 Collections.emptyList()
         );
 
@@ -63,6 +65,25 @@ public class BlockchainAttendanceContract extends Contract {
         final Function function = new Function(
                 "getAttendanceByStudent",
                 List.of(new Uint256(studentId)),
+                List.of(new TypeReference<DynamicArray<AttendanceDTO>>() {})
+        );
+
+        return new RemoteFunctionCall<>(
+                function,
+                () -> {
+                    List<Type> raw = executeCallMultipleValueReturn(function);
+
+                    DynamicArray<AttendanceDTO> array = (DynamicArray<AttendanceDTO>) raw.getFirst();
+
+                    return array.getValue();
+                }
+        );
+    }
+
+    public RemoteFunctionCall<List<AttendanceDTO>> getAttendanceByAttendance(BigInteger attendanceId) {
+        final Function function = new Function(
+                "getAttendanceByAttendance",
+                List.of(new Uint256(attendanceId)),
                 List.of(new TypeReference<DynamicArray<AttendanceDTO>>() {})
         );
 
