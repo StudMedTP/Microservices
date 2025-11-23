@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     Boolean existsByTeacherCode(String teacherCode);
+    Optional<Teacher> findByUser_Id(Long userId);
     Optional<Teacher> findByDailyCodeAndId(String dailyCode, Long id);
 }

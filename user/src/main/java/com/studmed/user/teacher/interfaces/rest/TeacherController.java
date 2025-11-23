@@ -6,6 +6,7 @@ import com.studmed.user.teacher.domain.model.commands.CreateTeacherCommand;
 import com.studmed.user.teacher.domain.model.commands.OpenClassByIdCommand;
 import com.studmed.user.teacher.domain.model.queries.GetTeacherByIdAndDailyCodeQuery;
 import com.studmed.user.teacher.domain.model.queries.GetTeacherByIdQuery;
+import com.studmed.user.teacher.domain.model.queries.GetTeacherByUserIdQuery;
 import com.studmed.user.teacher.domain.service.TeacherCommandService;
 import com.studmed.user.teacher.domain.service.TeacherQueryService;
 import com.studmed.user.teacher.interfaces.rest.resource.TeacherResource;
@@ -52,6 +53,18 @@ public class TeacherController {
         }
 
         Teacher teacher = teacherQueryService.handle(new GetTeacherByIdQuery(id));
+
+        TeacherResource teacherResource = TeacherResourceFromEntityAssembler.toResourceFromEntity(teacher);
+        return ResponseEntity.ok(teacherResource);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<TeacherResource> getTeacherByUserId(@PathVariable Long id) {
+        if (id <= 0) {
+            throw new BadRequestException("El ID debe ser mayor que 0");
+        }
+
+        Teacher teacher = teacherQueryService.handle(new GetTeacherByUserIdQuery(id));
 
         TeacherResource teacherResource = TeacherResourceFromEntityAssembler.toResourceFromEntity(teacher);
         return ResponseEntity.ok(teacherResource);

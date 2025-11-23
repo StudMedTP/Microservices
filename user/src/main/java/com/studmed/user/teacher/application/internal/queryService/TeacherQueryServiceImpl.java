@@ -6,6 +6,7 @@ import com.studmed.user.speciality.infraestructure.persistance.jpa.respositories
 import com.studmed.user.teacher.domain.model.aggregates.Teacher;
 import com.studmed.user.teacher.domain.model.queries.GetTeacherByIdAndDailyCodeQuery;
 import com.studmed.user.teacher.domain.model.queries.GetTeacherByIdQuery;
+import com.studmed.user.teacher.domain.model.queries.GetTeacherByUserIdQuery;
 import com.studmed.user.teacher.domain.service.TeacherQueryService;
 import com.studmed.user.teacher.infraestructure.persistance.jpa.respositories.TeacherRepository;
 import com.studmed.user.shared.exception.ResourceNotFoundException;
@@ -48,6 +49,17 @@ public class TeacherQueryServiceImpl implements TeacherQueryService {
         coordinatorRepository.findById(teacher.getCoordinator().getId()).ifPresent(teacher::setCoordinator);
 
         return teacher;
+    }
+
+    @Override
+    public Teacher handle(GetTeacherByUserIdQuery query) {
+        Optional<Teacher> teacherOptional = teacherRepository.findByUser_Id(query.id());
+
+        if (teacherOptional.isEmpty()) {
+            throw new ResourceNotFoundException("No se encontró profesor");
+        }
+
+        return teacherOptional.get();
     }
 
     @Override
