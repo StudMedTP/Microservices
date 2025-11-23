@@ -10,6 +10,7 @@ public class StudentResourceFromEntityAssembler {
         return new StudentResource(
                 entity.getId(),
                 entity.getStudentCode(),
+                entity.getTeacher().getId(),
                 new UserResource(
                         entity.getUser().getId(),
                         entity.getUser().getFirstName(),
