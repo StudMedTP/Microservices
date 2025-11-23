@@ -7,6 +7,7 @@ import com.studmed.attendance.record.domain.model.client.StudentResource;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAttendanceByIdQuery;
+import com.studmed.attendance.record.domain.model.queries.GetLastAttendanceByStudentIdQuery;
 import com.studmed.attendance.record.domain.service.AttendanceQueryService;
 import com.studmed.attendance.record.infraestructure.persistance.jpa.repositories.AttendanceRepository;
 import com.studmed.attendance.shared.exception.ResourceNotFoundException;
@@ -72,6 +73,43 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
             } else {
                 throw new RuntimeException("Error al validar estudiante.");
             }
+        } catch (FeignException.NotFound e) {
+            throw new RuntimeException("El estudiante no existe.");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al validar estudiante.");
+        }
+    }
+
+    @Override
+    public Attendance handle (GetLastAttendanceByStudentIdQuery query){
+        try {
+            userClient.getStudentById(query.studentId());
+
+            Optional<Attendance> attendanceOptional = attendanceRepository.findTopByStudentIdOrderByCreatedAtDesc(query.studentId());
+
+            if (attendanceOptional.isEmpty()) {
+                throw new ResourceNotFoundException("No se encontró asistencia");
+            }
+
+            Attendance attendance = attendanceOptional.get();
+
+            try {
+                StudentResource studentResourceAttendance = userClient.getStudentById(attendance.getStudentId()).getBody();
+                attendance.setStudent(studentResourceAttendance);
+            } catch (Exception e) {
+                StudentResource studentResourceAttendance = StudentResource.builder().build();
+                attendance.setStudent(studentResourceAttendance);
+            }
+
+            try {
+                MedicalCenterResource medicalCenterResourceAttendance = userClient.getMedicalCenterById(attendance.getMedicalCenterId()).getBody();
+                attendance.setMedicalCenter(medicalCenterResourceAttendance);
+            } catch (Exception e) {
+                MedicalCenterResource medicalCenterResourceAttendance = MedicalCenterResource.builder().build();
+                attendance.setMedicalCenter(medicalCenterResourceAttendance);
+            }
+
+            return attendance;
         } catch (FeignException.NotFound e) {
             throw new RuntimeException("El estudiante no existe.");
         } catch (Exception e) {

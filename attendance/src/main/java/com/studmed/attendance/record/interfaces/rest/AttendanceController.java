@@ -7,6 +7,7 @@ import com.studmed.attendance.record.domain.model.commands.UpdateAttendanceComma
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAttendanceByIdQuery;
+import com.studmed.attendance.record.domain.model.queries.GetLastAttendanceByStudentIdQuery;
 import com.studmed.attendance.record.domain.service.AttendanceCommandService;
 import com.studmed.attendance.record.domain.service.AttendanceQueryService;
 import com.studmed.attendance.record.interfaces.rest.resource.AttendanceResource;
@@ -53,7 +54,7 @@ public class AttendanceController {
 
         Attendance attendance = attendanceQueryService.handle(new GetAttendanceByIdQuery(id));
 
-        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
+        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourcePlainFromEntity(attendance);
         return ResponseEntity.status(HttpStatus.CREATED).body(attendanceResource);
     }
 
@@ -61,7 +62,7 @@ public class AttendanceController {
     public ResponseEntity<List<AttendanceResourcePlain>> getAllAttendances(){
         List<Attendance> attendances = attendanceQueryService.handle(new GetAllAttendanceQuery());
 
-        List<AttendanceResourcePlain> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourceFromEntity).toList();
+        List<AttendanceResourcePlain> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourcePlainFromEntity).toList();
         return ResponseEntity.ok(attendanceResources);
     }
 
@@ -73,7 +74,7 @@ public class AttendanceController {
 
         Attendance attendance = attendanceQueryService.handle(new GetAttendanceByIdQuery(id));
 
-        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
+        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourcePlainFromEntity(attendance);
         return ResponseEntity.ok(attendanceResource);
     }
 
@@ -88,7 +89,7 @@ public class AttendanceController {
 
         Attendance attendance = attendanceQueryService.handle(new GetAttendanceByIdQuery(attendanceId));
 
-        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
+        AttendanceResourcePlain attendanceResource = AttendanceResourceFromEntityAssembler.toResourcePlainFromEntity(attendance);
         return ResponseEntity.ok(attendanceResource);
     }
 
@@ -108,9 +109,19 @@ public class AttendanceController {
     public ResponseEntity<Map<String, List<AttendanceResource>>> getAttendancesByToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<Attendance> attendances = attendanceQueryService.handle(new GetAllAttendanceByUserIdQuery(userDetails.id()));
 
-        List<AttendanceResource> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourcePlainFromEntity).toList();
+        List<AttendanceResource> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourceFromEntity).toList();
 
         Map<String, List<AttendanceResource>> response = Map.of("attendances", attendanceResources);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/lastByStudentId/{id}")
+    public ResponseEntity<Map<String, AttendanceResource>> getAttendancesByToken(@PathVariable Long id) {
+        Attendance attendance = attendanceQueryService.handle(new GetLastAttendanceByStudentIdQuery(id));
+
+        AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
+
+        Map<String, AttendanceResource> response = Map.of("attendance", attendanceResource);
         return ResponseEntity.ok(response);
     }
 }

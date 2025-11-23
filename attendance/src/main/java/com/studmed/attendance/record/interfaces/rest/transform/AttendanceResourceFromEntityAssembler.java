@@ -7,7 +7,7 @@ import com.studmed.attendance.record.interfaces.rest.resource.MedicalCenterResou
 import com.studmed.attendance.record.interfaces.rest.resource.StudentResource;
 
 public class AttendanceResourceFromEntityAssembler {
-    public static AttendanceResource toResourcePlainFromEntity(Attendance entity) {
+    public static AttendanceResource toResourceFromEntity(Attendance entity) {
         return new AttendanceResource(
                 entity.getId(),
                 entity.getStudentId(),
@@ -26,7 +26,7 @@ public class AttendanceResourceFromEntityAssembler {
                 entity.getUpdatedAt());
     }
 
-    public static AttendanceResourcePlain toResourceFromEntity(Attendance entity) {
+    public static AttendanceResourcePlain toResourcePlainFromEntity(Attendance entity) {
         return new AttendanceResourcePlain(
                 entity.getId(),
                 entity.getStudentId(),
