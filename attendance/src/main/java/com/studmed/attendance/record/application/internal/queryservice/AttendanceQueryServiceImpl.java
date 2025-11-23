@@ -74,7 +74,7 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
                 throw new RuntimeException("Error al validar estudiante.");
             }
         } catch (FeignException.NotFound e) {
-            throw new RuntimeException("El estudiante no existe.");
+            throw new ResourceNotFoundException("El estudiante no existe.");
         } catch (Exception e) {
             throw new RuntimeException("Error al validar estudiante.");
         }
