@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/medical-centers")
@@ -44,11 +45,13 @@ public class MedicalCenterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MedicalCenterResource>> getAllMedicalCenters() {
+    public ResponseEntity<Map<String, List<MedicalCenterResource>>> getAllMedicalCenters() {
         List<MedicalCenter> medicalCenters = medicalCenterQueryService.handle(new GetAllMedicalCenters());
 
         List<MedicalCenterResource> medicalCenterResources = medicalCenters.stream().map(MedicalCenterResourceFromEntityAssembler::toResourceFromEntity).toList();
-        return ResponseEntity.ok(medicalCenterResources);
+
+        Map<String, List<MedicalCenterResource>> response = Map.of("medicalCenters", medicalCenterResources);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
