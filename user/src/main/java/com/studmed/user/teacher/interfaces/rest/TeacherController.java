@@ -22,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(value = "/teachers")
 @Tag(name = "Teacher", description = "Teacher Management Endpoints")
@@ -59,7 +61,7 @@ public class TeacherController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<TeacherResource> getTeacherByUserId(@PathVariable Long id) {
+    public ResponseEntity<Map<String, TeacherResource>> getTeacherByUserId(@PathVariable Long id) {
         if (id <= 0) {
             throw new BadRequestException("El ID debe ser mayor que 0");
         }
@@ -67,7 +69,9 @@ public class TeacherController {
         Teacher teacher = teacherQueryService.handle(new GetTeacherByUserIdQuery(id));
 
         TeacherResource teacherResource = TeacherResourceFromEntityAssembler.toResourceFromEntity(teacher);
-        return ResponseEntity.ok(teacherResource);
+
+        Map<String, TeacherResource> response = Map.of("teacher", teacherResource);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/openClass/{id}")
