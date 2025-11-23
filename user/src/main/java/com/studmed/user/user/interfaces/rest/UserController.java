@@ -2,6 +2,7 @@ package com.studmed.user.user.interfaces.rest;
 
 import com.studmed.user.shared.exception.BadRequestException;
 import com.studmed.user.shared.security.UserDetailsImpl;
+import com.studmed.user.student.intefaces.rest.resource.StudentResource;
 import com.studmed.user.user.domain.model.aggregates.User;
 import com.studmed.user.user.domain.model.commands.CreateUserCommand;
 import com.studmed.user.user.domain.model.commands.DeleteUserCommand;
@@ -24,6 +25,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -43,7 +45,7 @@ public class UserController {
 
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("User Microservice is up and running! 1.7");
+        return ResponseEntity.ok("User Microservice is up and running! 1.8");
     }
 
     @PostMapping
@@ -115,10 +117,12 @@ public class UserController {
     }
 
     @GetMapping("/myObject")
-    public ResponseEntity<UserResource> getUserByToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<Map<String, UserResource>> getUserByToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userQueryService.handle(new GetUserByIdQuery(userDetails.id()));
 
         UserResource userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user);
-        return ResponseEntity.ok(userResource);
+
+        Map<String, UserResource> response = Map.of("user", userResource);
+        return ResponseEntity.ok(response);
     }
 }
