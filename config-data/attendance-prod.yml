@@ -1,9 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:mysql://mysql-134a03d4-mysql-63da.b.aivencloud.com:19273/attendance_db
-    username: avnadmin
-    password: AVNS_XLYi5qXnUjvu13Zgkrc
-    driver-class-name: com.mysql.cj.jdbc.Driver
   boot:
     admin:
       client:

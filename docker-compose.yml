@@ -68,6 +68,9 @@ services:
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
       - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL_USER=${DATABASE_URL_USER}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8093/actuator/health"]
       interval: 10s
@@ -94,15 +97,18 @@ services:
       - SEPOLIA_RPC_URL=${SEPOLIA_RPC_URL}
       - SEPOLIA_PRIVATE_KEY=${SEPOLIA_PRIVATE_KEY}
       - ATTENDANCE_CONTRACT_ADDRESS=${ATTENDANCE_CONTRACT_ADDRESS}
+      - DATABASE_URL_ATTENDANCE=${DATABASE_URL_ATTENDANCE}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8094/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  api-gateway:
+  api:
     build: ./api-gateway
-    container_name: api-gateway
+    container_name: api
     ports:
       - "8080:8080"
     networks:
