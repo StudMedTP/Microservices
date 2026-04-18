@@ -65,6 +65,8 @@ services:
         condition: service_healthy
       admin-microservices:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
       - JWT_SECRET=${JWT_SECRET}
@@ -106,6 +108,33 @@ services:
       timeout: 5s
       retries: 5
 
+  notification:
+    build: ./notification
+    container_name: notification
+    ports:
+      - "8092:8092"
+    networks:
+      - microservices-network
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      admin-microservices:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - DATABASE_URL_NOTIFICATION=${DATABASE_URL_NOTIFICATION}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8092/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   api:
     build: ./api-gateway
     container_name: api
@@ -122,6 +151,20 @@ services:
         condition: service_healthy
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   microservices-network:
