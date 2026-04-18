@@ -7,3 +7,7 @@ spring:
     config:
       username: root
       password: s3cr3t
+  rabbitmq:
+    port: 5672
+    username: guest
+    password: guest

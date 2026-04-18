@@ -1,5 +1,6 @@
 package com.studmed.user.user.application.internal.queryservice;
 
+import com.studmed.user.shared.RabbitConfiguration;
 import com.studmed.user.shared.exception.BadRequestException;
 import com.studmed.user.shared.exception.ResourceNotFoundException;
 import com.studmed.user.user.domain.model.aggregates.User;
@@ -8,6 +9,7 @@ import com.studmed.user.user.domain.model.queries.GetUserByIdQuery;
 import com.studmed.user.user.domain.model.queries.GetUserByCredentials;
 import com.studmed.user.user.domain.service.UserQueryService;
 import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class UserQueryServiceImpl implements UserQueryService {
 
     private final UserRepository userRepository;
+    private final RabbitTemplate rabbitTemplate;
 
-    public UserQueryServiceImpl(UserRepository userRepository) {
+    public UserQueryServiceImpl(UserRepository userRepository, RabbitTemplate rabbitTemplate) {
         this.userRepository = userRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -35,6 +39,11 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     @Override
     public List<User> handle(GetAllUserQuery query) {
+        rabbitTemplate.convertAndSend(
+                RabbitConfiguration.EXCHANGE,
+                RabbitConfiguration.ROUTING_KEY,
+                "Hola desde el query service");
+
         return userRepository.findAll();
     }
 
