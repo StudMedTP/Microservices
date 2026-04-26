@@ -67,7 +67,7 @@ public class TeacherQueryServiceImpl implements TeacherQueryService {
         Optional<Teacher> teacherOptional = teacherRepository.findByDailyCodeAndId(query.dailyCode(), query.id());
 
         if (teacherOptional.isEmpty()) {
-            throw new ResourceNotFoundException("No se encontró docente");
+            throw new ResourceNotFoundException("Código incorecto");
         }
 
         Teacher teacher = teacherOptional.get();
