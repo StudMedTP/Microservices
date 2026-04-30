@@ -1,6 +1,6 @@
 package com.studmed.attendance.record.domain.model.aggregates;
 
-import com.studmed.attendance.record.domain.model.client.MedicalCenterResource;
+import com.studmed.attendance.record.domain.model.client.TeacherResource;
 import com.studmed.attendance.record.domain.model.client.StudentResource;
 import com.studmed.attendance.record.domain.model.commands.CreateAttendanceCommand;
 import jakarta.persistence.*;
@@ -8,7 +8,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -23,19 +22,21 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Double latitude;
+
+    private Double longitude;
+
     @Column(name = "student_id")
     private Long studentId;
 
     @Transient
     private StudentResource student;
 
-    @Column(name = "medical_center_id")
-    private Long medicalCenterId;
+    @Column(name = "teacher_id")
+    private Long teacherId;
 
     @Transient
-    private MedicalCenterResource medicalCenter;
-
-    private String status;
+    private TeacherResource teacher;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -45,13 +46,11 @@ public class Attendance {
     @UpdateTimestamp
     private Date updatedAt;
 
-    private LocalDateTime date;
-
     public Attendance(CreateAttendanceCommand command){
         this();
         this.studentId = command.studentId();
-        this.medicalCenterId = command.medicalCenterId();
-        this.status = command.status();
-        this.date = command.date();
+        this.teacherId = command.teacherId();
+        this.latitude = command.latitude();
+        this.longitude = command.longitude();
     }
 }

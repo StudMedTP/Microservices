@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
-    List<Attendance> findAllByStatusAndStudentId(String status, Long studentId);
+    List<Attendance> findAllByStudentId(Long studentId);
     Optional<Attendance> findTopByStudentIdOrderByCreatedAtDesc(Long studentId);
 }

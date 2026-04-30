@@ -7,8 +7,8 @@ public class CreateAttendanceCommandFromResourceAssembler {
     public static CreateAttendanceCommand toCommandFromResource(CreateAttendanceResource resource) {
         return new CreateAttendanceCommand(
                 resource.studentId(),
-                resource.medicalCenterId(),
-                "PENDIENTE",
-                resource.date());
+                resource.teacherId(),
+                resource.latitude(),
+                resource.longitude());
     }
 }

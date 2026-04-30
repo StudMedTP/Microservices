@@ -1,6 +1,6 @@
 package com.studmed.attendance.record.interfaces.rest.resource;
 
-public record MedicalCenterResource(
+public record TeacherResource(
         Long id,
-        String name
+        String teacherCode
 ) {}

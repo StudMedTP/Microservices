@@ -3,62 +3,38 @@ package com.studmed.attendance.record.interfaces.rest.transform;
 import com.studmed.attendance.record.domain.model.aggregates.Attendance;
 import com.studmed.attendance.record.interfaces.rest.resource.AttendanceResource;
 import com.studmed.attendance.record.interfaces.rest.resource.AttendanceResourcePlain;
-import com.studmed.attendance.record.interfaces.rest.resource.MedicalCenterResource;
 import com.studmed.attendance.record.interfaces.rest.resource.StudentResource;
+import com.studmed.attendance.record.interfaces.rest.resource.TeacherResource;
 
 public class AttendanceResourceFromEntityAssembler {
     public static AttendanceResource toResourceFromEntity(Attendance entity) {
         return new AttendanceResource(
                 entity.getId(),
                 entity.getStudentId(),
-                entity.getMedicalCenterId(),
-                entity.getStatus(),
+                entity.getTeacherId(),
                 new StudentResource(
                         entity.getStudent().getId(),
                         entity.getStudent().getStudentCode(),
                         entity.getStudent().getTeacherId()
                 ),
-                new MedicalCenterResource(
-                        entity.getMedicalCenter().getId(),
-                        entity.getMedicalCenter().getName()
+                new TeacherResource(
+                        entity.getTeacher().getId(),
+                        entity.getTeacher().getTeacherCode()
                 ),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
-                entity.getDate(),
-                0.0,
-                0.0);
-    }
-
-    public static AttendanceResource toResourceWithCoordinatesFromEntity(Attendance entity, Double latitude, Double longitude) {
-        return new AttendanceResource(
-                entity.getId(),
-                entity.getStudentId(),
-                entity.getMedicalCenterId(),
-                entity.getStatus(),
-                new StudentResource(
-                        entity.getStudent().getId(),
-                        entity.getStudent().getStudentCode(),
-                        entity.getStudent().getTeacherId()
-                ),
-                new MedicalCenterResource(
-                        entity.getMedicalCenter().getId(),
-                        entity.getMedicalCenter().getName()
-                ),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt(),
-                entity.getDate(),
-                latitude,
-                longitude);
+                entity.getLatitude(),
+                entity.getLongitude());
     }
 
     public static AttendanceResourcePlain toResourcePlainFromEntity(Attendance entity) {
         return new AttendanceResourcePlain(
                 entity.getId(),
                 entity.getStudentId(),
-                entity.getMedicalCenterId(),
-                entity.getStatus(),
+                entity.getTeacherId(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
-                entity.getDate());
+                entity.getLatitude(),
+                entity.getLongitude());
     }
 }

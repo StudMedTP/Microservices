@@ -27,12 +27,12 @@ public class AttendanceCommandServiceImpl implements AttendanceCommandService {
     public Long handle(CreateAttendanceCommand command) {
         try {
             userClient.getStudentById(command.studentId());
-            userClient.getMedicalCenterById(command.medicalCenterId());
+            userClient.getTeacherById(command.teacherId());
 
             Attendance attendance =  new Attendance(command);
             return attendanceRepository.save(attendance).getId();
         } catch (FeignException.NotFound e) {
-            throw new RuntimeException("El estudiante o centro médico no existe.");
+            throw new RuntimeException("El estudiante o profesor no existe.");
         } catch (Exception e) {
             throw new RuntimeException("Error al validar estudiante o centro médico.");
         }
@@ -47,8 +47,6 @@ public class AttendanceCommandServiceImpl implements AttendanceCommandService {
         }
 
         Attendance attendance = attendanceOptional.get();
-
-        attendance.setStatus(command.status());
 
         return attendanceRepository.save(attendance).getId();
     }

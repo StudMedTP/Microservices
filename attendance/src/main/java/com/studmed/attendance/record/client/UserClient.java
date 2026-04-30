@@ -1,6 +1,6 @@
 package com.studmed.attendance.record.client;
 
-import com.studmed.attendance.record.domain.model.client.MedicalCenterResource;
+import com.studmed.attendance.record.domain.model.client.TeacherResource;
 import com.studmed.attendance.record.domain.model.client.StudentResource;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,6 @@ public interface UserClient {
     @GetMapping("/students/user/{id}")
     ResponseEntity<StudentResource> getStudentByUserId(@PathVariable Long id);
 
-    @GetMapping("/medical-centers/{id}")
-    ResponseEntity<MedicalCenterResource> getMedicalCenterById(@PathVariable Long id);
+    @GetMapping("/teachers/{id}")
+    ResponseEntity<TeacherResource> getTeacherById(@PathVariable Long id);
 }

@@ -1,7 +1,5 @@
 package com.studmed.attendance.record.interfaces.rest;
 
-import com.studmed.attendance.blockchain.domain.model.BlockchainAttendance;
-import com.studmed.attendance.blockchain.domain.service.BlockchainService;
 import com.studmed.attendance.record.domain.model.aggregates.Attendance;
 import com.studmed.attendance.record.domain.model.commands.CreateAttendanceCommand;
 import com.studmed.attendance.record.domain.model.commands.DeleteAttendanceCommand;
@@ -9,7 +7,6 @@ import com.studmed.attendance.record.domain.model.commands.UpdateAttendanceComma
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAttendanceByIdQuery;
-import com.studmed.attendance.record.domain.model.queries.GetLastAttendanceByStudentIdQuery;
 import com.studmed.attendance.record.domain.service.AttendanceCommandService;
 import com.studmed.attendance.record.domain.service.AttendanceQueryService;
 import com.studmed.attendance.record.interfaces.rest.resource.AttendanceResource;
@@ -39,13 +36,9 @@ public class AttendanceController {
     private final AttendanceCommandService attendanceCommandService;
     private final AttendanceQueryService attendanceQueryService;
 
-    private final BlockchainService blockchainService;
-
-    public AttendanceController(AttendanceCommandService attendanceCommandService, AttendanceQueryService attendanceQueryService,
-                                BlockchainService blockchainService){
+    public AttendanceController(AttendanceCommandService attendanceCommandService, AttendanceQueryService attendanceQueryService){
         this.attendanceCommandService = attendanceCommandService;
         this.attendanceQueryService = attendanceQueryService;
-        this.blockchainService = blockchainService;
     }
 
     @GetMapping("/ping")
@@ -119,26 +112,5 @@ public class AttendanceController {
 
         Map<String, List<AttendanceResource>> response = Map.of("attendances", attendanceResources);
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/lastByStudentId/{id}")
-    public ResponseEntity<Map<String, AttendanceResource>> getLastAttendanceByStudentId(@PathVariable Long id) {
-        Attendance attendance = attendanceQueryService.handle(new GetLastAttendanceByStudentIdQuery(id));
-
-        if (attendance.getStatus().equals("PENDIENTE")) {
-            AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceFromEntity(attendance);
-
-            Map<String, AttendanceResource> response = Map.of("attendance", attendanceResource);
-            return ResponseEntity.ok(response);
-        } else {
-            List<BlockchainAttendance> attendances = blockchainService.getByAttendance(attendance.getId());
-
-            BlockchainAttendance lastAttendance = attendances.getLast();
-
-            AttendanceResource attendanceResource = AttendanceResourceFromEntityAssembler.toResourceWithCoordinatesFromEntity(attendance, lastAttendance.latitude, lastAttendance.longitude);
-
-            Map<String, AttendanceResource> response = Map.of("attendance", attendanceResource);
-            return ResponseEntity.ok(response);
-        }
     }
 }

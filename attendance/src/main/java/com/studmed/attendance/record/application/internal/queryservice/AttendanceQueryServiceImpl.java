@@ -2,7 +2,7 @@ package com.studmed.attendance.record.application.internal.queryservice;
 
 import com.studmed.attendance.record.client.UserClient;
 import com.studmed.attendance.record.domain.model.aggregates.Attendance;
-import com.studmed.attendance.record.domain.model.client.MedicalCenterResource;
+import com.studmed.attendance.record.domain.model.client.TeacherResource;
 import com.studmed.attendance.record.domain.model.client.StudentResource;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceQuery;
@@ -50,7 +50,7 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
             StudentResource studentResource = userClient.getStudentByUserId(query.userId()).getBody();
 
             if (studentResource != null) {
-                List<Attendance> attendances = attendanceRepository.findAllByStatusAndStudentId("PENDIENTE", studentResource.getId());
+                List<Attendance> attendances = attendanceRepository.findAllByStudentId(studentResource.getId());
 
                 attendances.forEach((attendance) -> {
                     try {
@@ -62,11 +62,11 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
                     }
 
                     try {
-                        MedicalCenterResource medicalCenterResourceAttendance = userClient.getMedicalCenterById(attendance.getMedicalCenterId()).getBody();
-                        attendance.setMedicalCenter(medicalCenterResourceAttendance);
+                        TeacherResource teacherResourceAttendance = userClient.getTeacherById(attendance.getTeacherId()).getBody();
+                        attendance.setTeacher(teacherResourceAttendance);
                     } catch (Exception e) {
-                        MedicalCenterResource medicalCenterResourceAttendance = MedicalCenterResource.builder().build();
-                        attendance.setMedicalCenter(medicalCenterResourceAttendance);
+                        TeacherResource teacherResourceAttendance = TeacherResource.builder().build();
+                        attendance.setTeacher(teacherResourceAttendance);
                     }
                 });
                 return attendances;
@@ -102,11 +102,11 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
             }
 
             try {
-                MedicalCenterResource medicalCenterResourceAttendance = userClient.getMedicalCenterById(attendance.getMedicalCenterId()).getBody();
-                attendance.setMedicalCenter(medicalCenterResourceAttendance);
+                TeacherResource teacherResourceAttendance = userClient.getTeacherById(attendance.getTeacherId()).getBody();
+                attendance.setTeacher(teacherResourceAttendance);
             } catch (Exception e) {
-                MedicalCenterResource medicalCenterResourceAttendance = MedicalCenterResource.builder().build();
-                attendance.setMedicalCenter(medicalCenterResourceAttendance);
+                TeacherResource teacherResourceAttendance = TeacherResource.builder().build();
+                attendance.setTeacher(teacherResourceAttendance);
             }
 
             return attendance;
