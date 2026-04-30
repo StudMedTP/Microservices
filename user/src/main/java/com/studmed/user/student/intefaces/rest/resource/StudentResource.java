@@ -6,6 +6,4 @@ import com.studmed.user.user.interfaces.rest.resource.UserResource;
 public record StudentResource(
         Long id,
         String studentCode,
-        Long teacherId,
-        UserResource userResource,
-        TeacherResourcePlain teacherResource) {}
+        UserResource userResource) {}

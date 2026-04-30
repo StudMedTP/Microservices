@@ -1,8 +1,6 @@
 package com.studmed.user.teacher.domain.model.aggregates;
 
-import com.studmed.user.coordinator.domain.model.aggregates.Coordinator;
 import com.studmed.user.medical_center.domain.model.aggregates.MedicalCenter;
-import com.studmed.user.speciality.domain.model.aggregates.Speciality;
 import com.studmed.user.teacher.domain.model.commands.CreateTeacherCommand;
 import com.studmed.user.user.domain.model.aggregates.User;
 import jakarta.persistence.*;
@@ -34,21 +32,11 @@ public class Teacher {
     @JoinColumn(name = "medicalCenterId")
     private MedicalCenter medicalCenter;
 
-    @ManyToOne
-    @JoinColumn(name = "specialityId")
-    private Speciality speciality;
-
-    @ManyToOne
-    @JoinColumn(name = "coordinatorId")
-    private Coordinator coordinator;
-
-    public Teacher(CreateTeacherCommand command, User user, MedicalCenter medicalCenter, Speciality speciality, Coordinator coordinator){
+    public Teacher(CreateTeacherCommand command, User user, MedicalCenter medicalCenter){
         this();
         this.teacherCode = command.teacherCode();
         this.dailyCode = null;
         this.user = user;
         this.medicalCenter = medicalCenter;
-        this.speciality = speciality;
-        this.coordinator = coordinator;
     }
 }

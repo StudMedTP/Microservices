@@ -8,8 +8,6 @@ public class CreateTeacherCommandFromResourceAssembler {
         return new CreateTeacherCommand(
                 resource.teacherCode(),
                 resource.userId(),
-                resource.medicalCenterId(),
-                resource.specialityId(),
-                resource.coordinatorId());
+                resource.medicalCenterId());
     }
 }

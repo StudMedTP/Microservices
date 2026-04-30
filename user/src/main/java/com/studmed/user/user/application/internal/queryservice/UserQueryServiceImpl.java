@@ -10,6 +10,7 @@ import com.studmed.user.user.domain.model.queries.GetUserByCredentials;
 import com.studmed.user.user.domain.service.UserQueryService;
 import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +21,12 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     private final UserRepository userRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserQueryServiceImpl(UserRepository userRepository, RabbitTemplate rabbitTemplate) {
+    public UserQueryServiceImpl(UserRepository userRepository, RabbitTemplate rabbitTemplate, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.rabbitTemplate = rabbitTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class UserQueryServiceImpl implements UserQueryService {
             throw new ResourceNotFoundException("No se encontró usuario");
         }
 
-        if (!userOptional.get().getPassword().equals(query.password())) {
+        if (!passwordEncoder.matches(query.password(), userOptional.get().getPassword())) {
             throw new BadRequestException("Credenciales Incorrectas");
         } else {
             return userOptional.get();

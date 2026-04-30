@@ -10,7 +10,5 @@ public record TeacherResource(
         String teacherCode,
         String dailyCode,
         UserResource userResource,
-        MedicalCenterResource medicalCenterResource,
-        SpecialityResource specialityResource,
-        CoordinatorResourcePlain coordinatorResource) {}
+        MedicalCenterResource medicalCenterResource) {}
 

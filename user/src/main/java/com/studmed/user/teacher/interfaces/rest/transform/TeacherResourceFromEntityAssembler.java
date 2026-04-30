@@ -22,12 +22,8 @@ public class TeacherResourceFromEntityAssembler {
                         entity.getUser().getRole()),
                 new MedicalCenterResource(
                         entity.getMedicalCenter().getId(),
-                        entity.getMedicalCenter().getName()),
-                new SpecialityResource(
-                        entity.getSpeciality().getId(),
-                        entity.getSpeciality().getName()),
-                new CoordinatorResourcePlain(
-                        entity.getCoordinator().getId(),
-                        entity.getCoordinator().getCoordinatorCode()));
+                        entity.getMedicalCenter().getName(),
+                        entity.getMedicalCenter().getLatitude(),
+                        entity.getMedicalCenter().getLongitude()));
     }
 }

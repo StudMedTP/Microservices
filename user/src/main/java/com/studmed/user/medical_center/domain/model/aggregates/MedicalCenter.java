@@ -20,8 +20,14 @@ public class MedicalCenter {
 
     private String name;
 
+    private Double latitude;
+
+    private Double longitude;
+
     public MedicalCenter(CreateMedicalCenterCommand command){
         this();
         this.name = command.name();
+        this.latitude = command.latitude();
+        this.longitude = command.longitude();
     }
 }

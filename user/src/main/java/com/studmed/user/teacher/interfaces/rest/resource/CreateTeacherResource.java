@@ -12,10 +12,4 @@ public record CreateTeacherResource(
         Long userId,
         @NotNull()
         @Min(value = 1)
-        Long medicalCenterId,
-        @NotNull()
-        @Min(value = 1)
-        Long specialityId,
-        @NotNull()
-        @Min(value = 1)
-        Long coordinatorId) {}
+        Long medicalCenterId) {}

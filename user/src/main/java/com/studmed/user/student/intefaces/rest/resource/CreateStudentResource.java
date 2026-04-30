@@ -9,7 +9,4 @@ public record CreateStudentResource(
         String studentCode,
         @NotNull()
         @Min(value = 1)
-        Long userId,
-        @NotNull()
-        @Min(value = 1)
-        Long teacherId) {}
+        Long userId) {}

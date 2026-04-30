@@ -10,5 +10,4 @@ import java.util.List;
 public interface StudentQueryService {
     Student handle(GetStudentByIdQuery query);
     Student handle(GetStudentByUserIdQuery query);
-    List<Student> handle(GetAllStudentsByTeacherIdQuery query);
 }

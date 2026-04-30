@@ -6,6 +6,7 @@ import com.studmed.user.user.domain.model.commands.DeleteUserCommand;
 import com.studmed.user.user.domain.model.commands.UpdateUserCommand;
 import com.studmed.user.user.domain.service.UserCommandService;
 import com.studmed.user.user.infraestructure.persistance.jpa.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,9 +15,11 @@ import java.util.Optional;
 public class UserCommandServiceImpl implements UserCommandService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserCommandServiceImpl(UserRepository userRepository) {
+    public UserCommandServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -25,7 +28,9 @@ public class UserCommandServiceImpl implements UserCommandService {
             throw new IllegalArgumentException("Ya existe un usuario con ese correo");
         }
 
-        User user = new User(command);
+        String encodedPassword = passwordEncoder.encode(command.password());
+
+        User user = new User(command, encodedPassword);
         return userRepository.save(user).getId();
     }
 

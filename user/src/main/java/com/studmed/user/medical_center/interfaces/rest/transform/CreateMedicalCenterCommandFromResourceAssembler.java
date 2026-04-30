@@ -6,6 +6,8 @@ import com.studmed.user.medical_center.interfaces.rest.resource.CreateMedicalCen
 public class CreateMedicalCenterCommandFromResourceAssembler {
     public static CreateMedicalCenterCommand toCommandFromResource(CreateMedicalCenterResource resource) {
         return new CreateMedicalCenterCommand(
-                resource.name());
+                resource.name(),
+                resource.latitude(),
+                resource.longitude());
     }
 }

@@ -70,14 +70,4 @@ public class StudentController {
         StudentResource studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student);
         return ResponseEntity.ok(studentResource);
     }
-
-    @GetMapping("/teacher/myObject")
-    public ResponseEntity<Map<String, List<StudentResource>>> getAllStudentByTeacherToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<Student> students = studentQueryService.handle(new GetAllStudentsByTeacherIdQuery(userDetails.id()));
-
-        List<StudentResource> studentsResource = students.stream().map(StudentResourceFromEntityAssembler::toResourceFromEntity).toList();
-
-        Map<String, List<StudentResource>> response = Map.of("students", studentsResource);
-        return ResponseEntity.ok(response);
-    }
 }

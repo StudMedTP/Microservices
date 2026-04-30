@@ -26,12 +26,12 @@ public class User {
 
     private String role;
 
-    public User (CreateUserCommand command){
+    public User (CreateUserCommand command, String password){
         this();
         this.firstName = command.firstName();
         this.lastName = command.lastName();
         this.email = command.email();
-        this.password = command.password();
+        this.password = password;
         this.role = command.role();
     }
 }

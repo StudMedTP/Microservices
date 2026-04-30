@@ -7,6 +7,8 @@ public class MedicalCenterResourceFromEntityAssembler {
     public static MedicalCenterResource toResourceFromEntity(MedicalCenter entity) {
         return new MedicalCenterResource(
                 entity.getId(),
-                entity.getName());
+                entity.getName(),
+                entity.getLatitude(),
+                entity.getLongitude());
     }
 }
