@@ -11,7 +11,27 @@ spring:
         - id: evaluation
           uri: lb://evaluation
           predicates:
-            - Path=/api/v1/evaluations/**
+            - Path=/microservice-evaluation/classes/**
+          filters:
+            - RewritePath=/microservice-evaluation/classes, /classes
+        - id: class-student
+          uri: lb://evaluation
+          predicates:
+            - Path=/microservice-evaluation/class-students/**
+          filters:
+            - RewritePath=/microservice-evaluation/class-students, /class-students
+        - id: grade
+          uri: lb://evaluation
+          predicates:
+            - Path=/microservice-evaluation/grades/**
+          filters:
+            - RewritePath=/microservice-evaluation/grades, /grades
+        - id: clinic-history
+          uri: lb://evaluation
+          predicates:
+            - Path=/microservice-evaluation/clinic-histories/**
+          filters:
+            - RewritePath=/microservice-evaluation/clinic-histories, /clinic-histories
 
         - id: notification
           uri: lb://notification
@@ -81,12 +101,12 @@ spring:
             - Path=/user/v3/api-docs
           filters:
             - RewritePath=/user/v3/api-docs, /v3/api-docs
-        - id: soporte-swagger
-          uri: lb://soporte
+        - id: evaluation-swagger
+          uri: lb://evaluation
           predicates:
-            - Path=/soporte/v3/api-docs
+            - Path=/evaluation/v3/api-docs
           filters:
-            - RewritePath=/soporte/v3/api-docs, /v3/api-docs
+            - RewritePath=/evaluation/v3/api-docs, /v3/api-docs
         - id: attendance-swagger
           uri: lb://attendance
           predicates:
@@ -103,7 +123,7 @@ springdoc:
     urls:
       - url: /user/v3/api-docs
         name: User Microservice
-      - url: /soporte/v3/api-docs
-        name: Soporte Microservice
+      - url: /evaluation/v3/api-docs
+        name: Evaluation Microservice
       - url: /attendance/v3/api-docs
         name: Attendance Microservice

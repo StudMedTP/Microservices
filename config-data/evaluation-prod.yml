@@ -1,0 +1,10 @@
+spring:
+  boot:
+    admin:
+      client:
+        url: http://admin-microservices:8086
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-service:8099/eureka/
