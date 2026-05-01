@@ -14,8 +14,7 @@ public class AttendanceResourceFromEntityAssembler {
                 entity.getTeacherId(),
                 new StudentResource(
                         entity.getStudent().getId(),
-                        entity.getStudent().getStudentCode(),
-                        entity.getStudent().getTeacherId()
+                        entity.getStudent().getStudentCode()
                 ),
                 new TeacherResource(
                         entity.getTeacher().getId(),

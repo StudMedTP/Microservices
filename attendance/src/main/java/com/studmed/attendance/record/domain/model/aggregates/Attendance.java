@@ -1,5 +1,6 @@
 package com.studmed.attendance.record.domain.model.aggregates;
 
+import com.studmed.attendance.record.domain.model.client.ClassroomResource;
 import com.studmed.attendance.record.domain.model.client.TeacherResource;
 import com.studmed.attendance.record.domain.model.client.StudentResource;
 import com.studmed.attendance.record.domain.model.commands.CreateAttendanceCommand;
@@ -38,6 +39,12 @@ public class Attendance {
     @Transient
     private TeacherResource teacher;
 
+    @Column(name = "classroom_id")
+    private Long classroomId;
+
+    @Transient
+    private ClassroomResource classroom;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private Date createdAt;
@@ -50,6 +57,7 @@ public class Attendance {
         this();
         this.studentId = command.studentId();
         this.teacherId = command.teacherId();
+        this.classroomId = command.classroomId();
         this.latitude = command.latitude();
         this.longitude = command.longitude();
     }

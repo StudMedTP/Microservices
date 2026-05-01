@@ -12,6 +12,9 @@ public record CreateAttendanceResource(
         @NotNull()
         @Min(value = 1)
         Long teacherId,
+        @NotNull()
+        @Min(value = 1)
+        Long classroomId,
         @NotNull
         @DecimalMin(value = "-90.0")
         @DecimalMax(value = "90.0")

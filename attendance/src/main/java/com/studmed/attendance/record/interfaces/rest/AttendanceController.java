@@ -4,7 +4,8 @@ import com.studmed.attendance.record.domain.model.aggregates.Attendance;
 import com.studmed.attendance.record.domain.model.commands.CreateAttendanceCommand;
 import com.studmed.attendance.record.domain.model.commands.DeleteAttendanceCommand;
 import com.studmed.attendance.record.domain.model.commands.UpdateAttendanceCommand;
-import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdQuery;
+import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByStudentIdAndClassroomIdQuery;
+import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdAndClassroomIdQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAttendanceByIdQuery;
 import com.studmed.attendance.record.domain.service.AttendanceCommandService;
@@ -77,6 +78,24 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceResource);
     }
 
+    @GetMapping("/student/{studentId}/classroom/{classroomId}")
+    public ResponseEntity<Map<String, List<AttendanceResource>>> getAttendanceByStudentId(@PathVariable Long studentId, @PathVariable Long classroomId){
+        if (studentId <= 0) {
+            throw new BadRequestException("El ID debe ser mayor que 0");
+        }
+
+        if (classroomId <= 0) {
+            throw new BadRequestException("El ID debe ser mayor que 0");
+        }
+
+        List<Attendance> attendances = attendanceQueryService.handle(new GetAllAttendanceByStudentIdAndClassroomIdQuery(studentId, classroomId));
+
+        List<AttendanceResource> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourceFromEntity).toList();
+
+        Map<String, List<AttendanceResource>> response = Map.of("attendances", attendanceResources);
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<AttendanceResourcePlain> updateAttendance(@PathVariable Long id, @RequestBody @Valid UpdateAttendanceResource updateAttendanceResource){
         if (id <= 0) {
@@ -104,9 +123,13 @@ public class AttendanceController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/myObject")
-    public ResponseEntity<Map<String, List<AttendanceResource>>> getAttendancesByToken(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<Attendance> attendances = attendanceQueryService.handle(new GetAllAttendanceByUserIdQuery(userDetails.id()));
+    @GetMapping("/myObject/classroom/{classroomId}")
+    public ResponseEntity<Map<String, List<AttendanceResource>>> getAttendancesByToken(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long classroomId) {
+        if (classroomId <= 0) {
+            throw new BadRequestException("El ID debe ser mayor que 0");
+        }
+
+        List<Attendance> attendances = attendanceQueryService.handle(new GetAllAttendanceByUserIdAndClassroomIdQuery(userDetails.id(), classroomId));
 
         List<AttendanceResource> attendanceResources = attendances.stream().map(AttendanceResourceFromEntityAssembler::toResourceFromEntity).toList();
 

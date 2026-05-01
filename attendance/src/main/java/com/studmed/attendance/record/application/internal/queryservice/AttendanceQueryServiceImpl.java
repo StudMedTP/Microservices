@@ -1,13 +1,14 @@
 package com.studmed.attendance.record.application.internal.queryservice;
 
+import com.studmed.attendance.record.client.EvaluationClient;
 import com.studmed.attendance.record.client.UserClient;
 import com.studmed.attendance.record.domain.model.aggregates.Attendance;
 import com.studmed.attendance.record.domain.model.client.TeacherResource;
 import com.studmed.attendance.record.domain.model.client.StudentResource;
-import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdQuery;
+import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByStudentIdAndClassroomIdQuery;
+import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceByUserIdAndClassroomIdQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAllAttendanceQuery;
 import com.studmed.attendance.record.domain.model.queries.GetAttendanceByIdQuery;
-import com.studmed.attendance.record.domain.model.queries.GetLastAttendanceByStudentIdQuery;
 import com.studmed.attendance.record.domain.service.AttendanceQueryService;
 import com.studmed.attendance.record.infraestructure.persistance.jpa.repositories.AttendanceRepository;
 import com.studmed.attendance.shared.exception.ResourceNotFoundException;
@@ -22,10 +23,13 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
 
     private final AttendanceRepository attendanceRepository;
     public final UserClient userClient;
+    public final EvaluationClient evaluationClient;
 
-    public AttendanceQueryServiceImpl(AttendanceRepository attendanceRepository, UserClient userClient) {
+    public AttendanceQueryServiceImpl(AttendanceRepository attendanceRepository, UserClient userClient,
+                                      EvaluationClient evaluationClient) {
         this.attendanceRepository = attendanceRepository;
         this.userClient = userClient;
+        this.evaluationClient = evaluationClient;
     }
 
     @Override
@@ -45,12 +49,44 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
     }
 
     @Override
-    public List<Attendance> handle (GetAllAttendanceByUserIdQuery query){
+    public List<Attendance> handle (GetAllAttendanceByStudentIdAndClassroomIdQuery query) {
+        try {
+            StudentResource studentResource = userClient.getStudentById(query.studentId()).getBody();
+
+            evaluationClient.getAttendanceById(query.classroomId());
+
+            if (studentResource != null) {
+                List<Attendance> attendances = attendanceRepository.findAllByStudentIdAndClassroomId(studentResource.getId(), query.classroomId());
+
+                attendances.forEach((attendance) -> {
+                    try {
+                        TeacherResource teacherResourceAttendance = userClient.getTeacherById(attendance.getTeacherId()).getBody();
+                        attendance.setTeacher(teacherResourceAttendance);
+                    } catch (Exception e) {
+                        TeacherResource teacherResourceAttendance = TeacherResource.builder().build();
+                        attendance.setTeacher(teacherResourceAttendance);
+                    }
+                });
+                return attendances;
+            } else {
+                throw new RuntimeException("Error al validar estudiante.");
+            }
+        } catch (FeignException.NotFound e) {
+            throw new ResourceNotFoundException("El estudiante o la clase no existe.");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al validar estudiante o la clase.");
+        }
+    }
+
+    @Override
+    public List<Attendance> handle (GetAllAttendanceByUserIdAndClassroomIdQuery query){
         try {
             StudentResource studentResource = userClient.getStudentByUserId(query.userId()).getBody();
 
+            evaluationClient.getAttendanceById(query.classroomId());
+
             if (studentResource != null) {
-                List<Attendance> attendances = attendanceRepository.findAllByStudentId(studentResource.getId());
+                List<Attendance> attendances = attendanceRepository.findAllByStudentIdAndClassroomId(studentResource.getId(), query.classroomId());
 
                 attendances.forEach((attendance) -> {
                     try {
@@ -74,48 +110,9 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
                 throw new RuntimeException("Error al validar estudiante.");
             }
         } catch (FeignException.NotFound e) {
-            throw new ResourceNotFoundException("El estudiante no existe.");
+            throw new ResourceNotFoundException("El estudiante o la clase no existe.");
         } catch (Exception e) {
-            throw new RuntimeException("Error al validar estudiante.");
-        }
-    }
-
-    @Override
-    public Attendance handle (GetLastAttendanceByStudentIdQuery query){
-        try {
-            userClient.getStudentById(query.studentId());
-
-            Optional<Attendance> attendanceOptional = attendanceRepository.findTopByStudentIdOrderByCreatedAtDesc(query.studentId());
-
-            if (attendanceOptional.isEmpty()) {
-                throw new ResourceNotFoundException("No se encontró asistencia");
-            }
-
-            Attendance attendance = attendanceOptional.get();
-
-            try {
-                StudentResource studentResourceAttendance = userClient.getStudentById(attendance.getStudentId()).getBody();
-                attendance.setStudent(studentResourceAttendance);
-            } catch (Exception e) {
-                StudentResource studentResourceAttendance = StudentResource.builder().build();
-                attendance.setStudent(studentResourceAttendance);
-            }
-
-            try {
-                TeacherResource teacherResourceAttendance = userClient.getTeacherById(attendance.getTeacherId()).getBody();
-                attendance.setTeacher(teacherResourceAttendance);
-            } catch (Exception e) {
-                TeacherResource teacherResourceAttendance = TeacherResource.builder().build();
-                attendance.setTeacher(teacherResourceAttendance);
-            }
-
-            return attendance;
-        } catch (FeignException.NotFound e) {
-            throw new RuntimeException("El estudiante no existe.");
-        } catch (ResourceNotFoundException e) {
-            throw new ResourceNotFoundException("No se encontró asistencia");
-        } catch (Exception e) {
-            throw new RuntimeException("Error al validar estudiante.");
+            throw new RuntimeException("Error al validar estudiante o la clase.");
         }
     }
 }

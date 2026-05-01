@@ -8,6 +8,7 @@ public class CreateAttendanceCommandFromResourceAssembler {
         return new CreateAttendanceCommand(
                 resource.studentId(),
                 resource.teacherId(),
+                resource.classroomId(),
                 resource.latitude(),
                 resource.longitude());
     }
