@@ -108,6 +108,34 @@ services:
       timeout: 5s
       retries: 5
 
+  evaluation:
+    build: ./evaluation
+    container_name: evaluation
+    ports:
+      - "8091:8091"
+    networks:
+      - microservices-network
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      admin-microservices:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL_EVALUATION=${DATABASE_URL_EVALUATION}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   notification:
     build: ./notification
     container_name: notification
