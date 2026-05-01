@@ -9,12 +9,9 @@ jobs:
     detectar-cambios:
         runs-on: ubuntu-latest
         outputs:
-            config: ${{ steps.filter.outputs.config }}
-            eureka: ${{ steps.filter.outputs.eureka }}
-            admin: ${{ steps.filter.outputs.admin }}
             user: ${{ steps.filter.outputs.user }}
             attendance: ${{ steps.filter.outputs.attendance }}
-            apigateway: ${{ steps.filter.outputs.apigateway }}
+            evaluation: ${{ steps.filter.outputs.evaluation }}
         steps:
             - name: Clonar el repositorio
               uses: actions/checkout@v3
@@ -24,12 +21,9 @@ jobs:
               uses: dorny/paths-filter@v2
               with:
                 filters: |
-                    config: 'config-service/**'
-                    eureka: 'eureka-service/**'
-                    admin: 'admin-microservices/**'
                     user: 'user/**'
                     attendance: 'attendance/**'
-                    apigateway: 'api-gateway/**'
+                    evaluation: 'evaluation/**'
 
     deploy-user:
         needs: detectar-cambios
@@ -142,3 +136,59 @@ jobs:
               uses: Ilshidur/action-discord@master
               with:
                 args: 'El despliegue en *attendance-microservice* ha fallado'
+
+    deploy-evaluation:
+        needs: detectar-cambios
+        if: needs.detectar-cambios.outputs.evaluation == 'true'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Clonar el repositorio
+              uses: actions/checkout@v3
+
+            - name: Construir el .jar
+              working-directory: evaluation
+              env:
+                  ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+              run: |
+                chmod +x gradlew
+                ./gradlew clean build -x test
+
+            - name: Enviar .jar a EC2
+              uses: appleboy/scp-action@v0.1.4
+              with:
+                key: ${{ secrets.EC2_SSH_KEY }}
+                username: ${{ secrets.EC2_USER }}
+                host: ${{ secrets.EC2_HOST }}
+                source: "/home/runner/work/Microservices/Microservices/evaluation/build/libs/evaluation-0.0.1-SNAPSHOT.jar"
+                target: "/home/ubuntu"
+
+            - name: Conexión SSH al servidor EC2
+              uses: appleboy/ssh-action@v1.0.0
+              with:
+                key: ${{ secrets.EC2_SSH_KEY }}
+                username: ${{ secrets.EC2_USER }}
+                host: ${{ secrets.EC2_HOST }}
+                script: |
+                    cd /home/ubuntu
+                    mv ./github/workspace/evaluation/build/libs/evaluation-0.0.1-SNAPSHOT.jar ./Microservices/evaluation/build/libs/
+                    rm -r github/
+                    cd Microservices
+                    docker-compose up --build -d evaluation
+                    docker image prune -f
+
+            - name: Notificación en Discord
+              if: success()
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+              uses: Ilshidur/action-discord@master
+              with:
+                args: "Despliegue exitoso en *evaluation-microservice*"
+
+            - name: Notificación en Discord (fallo)
+              if: failure()
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+              uses: Ilshidur/action-discord@master
+              with:
+                args: 'El despliegue en *evaluation-microservice* ha fallado'

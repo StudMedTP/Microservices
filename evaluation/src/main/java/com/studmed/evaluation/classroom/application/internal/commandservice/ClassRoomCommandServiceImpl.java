@@ -35,7 +35,7 @@ public class ClassRoomCommandServiceImpl implements ClassroomCommandService {
         } catch (FeignException.NotFound e) {
             throw new RuntimeException("El centro médico o profesor no existe.");
         } catch (Exception e) {
-            throw new RuntimeException("Error al validar centro médico o centro médico.");
+            throw new RuntimeException("Error al validar centro médico o profesor.");
         }
     }
 }
