@@ -68,6 +68,8 @@ public class StudentController {
         Student student = studentQueryService.handle(new GetStudentByUserIdQuery(id));
 
         StudentResource studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student);
-        return ResponseEntity.ok(studentResource);
+
+        Map<String, StudentResource> response = Map.of("student", studentResource);
+        return ResponseEntity.ok(response);
     }
 }
