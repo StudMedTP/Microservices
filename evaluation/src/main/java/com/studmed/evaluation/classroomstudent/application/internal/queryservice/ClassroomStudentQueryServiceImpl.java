@@ -48,7 +48,12 @@ public class ClassroomStudentQueryServiceImpl implements ClassroomStudentQuerySe
             Map<String, StudentResource> studentMapResource = userClient.getStudentByUserId(query.userId()).getBody();
 
             if (studentMapResource != null) {
-                return classroomStudentRepository.findAllByStudentId(studentMapResource.get("student").getId());
+                List<ClassroomStudent> classroomStudents = classroomStudentRepository.findAllByStudentId(studentMapResource.get("student").getId());
+
+                classroomStudents.forEach((classroomStudent) -> {
+                    classroomStudent.setStudent(studentMapResource.get("student"));
+                });
+                return classroomStudents;
             } else {
                 throw new RuntimeException("Error al validar estudiante.");
             }
