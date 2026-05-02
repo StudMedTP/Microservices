@@ -11,15 +11,15 @@ spring:
         - id: evaluation
           uri: lb://evaluation
           predicates:
-            - Path=/microservice-evaluation/classes/**
+            - Path=/microservice-evaluation/classrooms/**
           filters:
-            - RewritePath=/microservice-evaluation/classes, /classes
+            - RewritePath=/microservice-evaluation/classrooms, /classrooms
         - id: class-student
           uri: lb://evaluation
           predicates:
-            - Path=/microservice-evaluation/class-students/**
+            - Path=/microservice-evaluation/classroom-students/**
           filters:
-            - RewritePath=/microservice-evaluation/class-students, /class-students
+            - RewritePath=/microservice-evaluation/classroom-students, /classroom-students
         - id: grade
           uri: lb://evaluation
           predicates:
