@@ -16,6 +16,7 @@ import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -83,28 +84,22 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
     @Override
     public List<Attendance> handle (GetAllAttendanceByUserIdAndClassroomIdQuery query){
         try {
-            StudentResource studentResource = userClient.getStudentByUserId(query.userId()).getBody();
+            Map<String, StudentResource> studentMapResource = userClient.getStudentByUserId(query.userId()).getBody();
 
             evaluationClient.getAttendanceById(query.classroomId());
 
-            if (studentResource != null) {
-                List<Attendance> attendances = attendanceRepository.findAllByStudentIdAndClassroomId(studentResource.getId(), query.classroomId());
+            if (studentMapResource != null) {
+                List<Attendance> attendances = attendanceRepository.findAllByStudentIdAndClassroomId(studentMapResource.get("student").getId(), query.classroomId());
 
                 attendances.forEach((attendance) -> {
                     try {
-                        StudentResource studentResourceAttendance = userClient.getStudentById(attendance.getStudentId()).getBody();
-                        attendance.setStudent(studentResourceAttendance);
-                    } catch (Exception e) {
-                        StudentResource studentResourceAttendance = StudentResource.builder().build();
-                        attendance.setStudent(studentResourceAttendance);
-                    }
-
-                    try {
                         TeacherResource teacherResourceAttendance = userClient.getTeacherById(attendance.getTeacherId()).getBody();
                         attendance.setTeacher(teacherResourceAttendance);
+                        attendance.setStudent(studentMapResource.get("student"));
                     } catch (Exception e) {
                         TeacherResource teacherResourceAttendance = TeacherResource.builder().build();
                         attendance.setTeacher(teacherResourceAttendance);
+                        attendance.setStudent(studentMapResource.get("student"));
                     }
                 });
                 return attendances;
