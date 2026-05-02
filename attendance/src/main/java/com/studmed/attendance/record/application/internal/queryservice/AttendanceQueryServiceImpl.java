@@ -62,9 +62,11 @@ public class AttendanceQueryServiceImpl implements AttendanceQueryService {
                     try {
                         TeacherResource teacherResourceAttendance = userClient.getTeacherById(attendance.getTeacherId()).getBody();
                         attendance.setTeacher(teacherResourceAttendance);
+                        attendance.setStudent(studentResource);
                     } catch (Exception e) {
                         TeacherResource teacherResourceAttendance = TeacherResource.builder().build();
                         attendance.setTeacher(teacherResourceAttendance);
+                        attendance.setStudent(studentResource);
                     }
                 });
                 return attendances;
