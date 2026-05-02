@@ -60,7 +60,7 @@ public class StudentController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<StudentResource> getStudentByUserId(@PathVariable Long id) {
+    public ResponseEntity<Map<String, StudentResource>> getStudentByUserId(@PathVariable Long id) {
         if (id <= 0) {
             throw new BadRequestException("El ID debe ser mayor que 0");
         }
