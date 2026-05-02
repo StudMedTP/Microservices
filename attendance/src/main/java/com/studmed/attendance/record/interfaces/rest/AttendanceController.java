@@ -44,7 +44,7 @@ public class AttendanceController {
 
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("Attendance Microservice is up and running! 1.8");
+        return ResponseEntity.ok("Attendance Microservice is up and running! 1.9");
     }
 
     @PostMapping
