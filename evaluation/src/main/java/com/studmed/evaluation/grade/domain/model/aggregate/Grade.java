@@ -25,7 +25,7 @@ public class Grade {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "classroom_id")
+    @JoinColumn(name = "classroom_student_id")
     private ClassroomStudent classroomStudent;
 
     public Grade(CreateGradeCommand command, ClassroomStudent classroomStudent){
