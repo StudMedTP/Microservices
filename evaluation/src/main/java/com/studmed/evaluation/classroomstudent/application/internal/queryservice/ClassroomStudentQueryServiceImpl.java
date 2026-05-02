@@ -14,6 +14,7 @@ import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -44,10 +45,10 @@ public class ClassroomStudentQueryServiceImpl implements ClassroomStudentQuerySe
     @Override
     public List<ClassroomStudent> handle (GetAllClassroomStudentByUserIdQuery query){
         try {
-            StudentResource studentResource = userClient.getStudentByUserId(query.userId()).getBody();
+            Map<String, StudentResource> studentMapResource = userClient.getStudentByUserId(query.userId()).getBody();
 
-            if (studentResource != null) {
-                return classroomStudentRepository.findAllByStudentId(studentResource.getId());
+            if (studentMapResource != null) {
+                return classroomStudentRepository.findAllByStudentId(studentMapResource.get("student").getId());
             } else {
                 throw new RuntimeException("Error al validar estudiante.");
             }

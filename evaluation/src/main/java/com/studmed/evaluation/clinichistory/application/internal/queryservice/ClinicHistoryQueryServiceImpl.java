@@ -12,6 +12,7 @@ import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -49,20 +50,20 @@ public class ClinicHistoryQueryServiceImpl implements ClinicHistoryQueryService 
     @Override
     public List<ClinicHistory> handle(GetAllClinicHistoriesByUserIdQuery query) {
         try {
-            StudentResource studentResource = userClient.getStudentByUserId(query.userId()).getBody();
+            Map<String, StudentResource> studentMapResource = userClient.getStudentByUserId(query.userId()).getBody();
 
-            if (studentResource != null) {
-                List<ClinicHistory> clinicHistories = clinicHistoryRepository.findAllByStudentId(studentResource.getId());
+            if (studentMapResource != null) {
+                List<ClinicHistory> clinicHistories = clinicHistoryRepository.findAllByStudentId(studentMapResource.get("student").getId());
 
-                clinicHistories.forEach((clinicHistory) -> clinicHistory.setStudent(studentResource));
+                clinicHistories.forEach((clinicHistory) -> clinicHistory.setStudent(studentMapResource.get("student")));
                 return clinicHistories;
             } else {
-                throw new RuntimeException("Error al validar profesor.");
+                throw new RuntimeException("Error al validar estudiante.");
             }
         } catch (FeignException.NotFound e) {
-            throw new ResourceNotFoundException("El profesor no existe.");
+            throw new ResourceNotFoundException("El estudiante no existe.");
         } catch (Exception e) {
-            throw new RuntimeException("Error al validar profesor.");
+            throw new RuntimeException("Error al validar estudiante.");
         }
     }
 }
