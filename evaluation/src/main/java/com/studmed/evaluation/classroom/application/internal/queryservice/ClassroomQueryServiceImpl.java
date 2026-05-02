@@ -13,6 +13,7 @@ import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -54,20 +55,20 @@ public class ClassroomQueryServiceImpl implements ClassroomQueryService {
     @Override
     public List<Classroom> handle (GetAllClassroomByUserIdQuery query){
         try {
-            TeacherResource teacherResource = userClient.getTeacherByUserId(query.userId()).getBody();
+            Map<String, TeacherResource> teacherMapResource = userClient.getTeacherByUserId(query.userId()).getBody();
 
-            if (teacherResource != null) {
-                List<Classroom> classrooms = classroomRepository.findAllByTeacherId(teacherResource.getId());
+            if (teacherMapResource != null) {
+                List<Classroom> classrooms = classroomRepository.findAllByTeacherId(teacherMapResource.get("teacher").getId());
 
                 classrooms.forEach((classroom) -> {
                     try {
                         MedicalCenterResource medicalCenterResourceClassroom = userClient.getMedicalCenterById(classroom.getMedicalCenterId()).getBody();
                         classroom.setMedicalCenter(medicalCenterResourceClassroom);
-                        classroom.setTeacher(teacherResource);
+                        classroom.setTeacher(teacherMapResource.get("teacher"));
                     } catch (Exception e) {
                         MedicalCenterResource medicalCenterResourceClassroom = MedicalCenterResource.builder().build();
                         classroom.setMedicalCenter(medicalCenterResourceClassroom);
-                        classroom.setTeacher(teacherResource);
+                        classroom.setTeacher(teacherMapResource.get("teacher"));
                     }
                 });
                 return classrooms;

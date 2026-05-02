@@ -22,7 +22,7 @@ public interface UserClient {
     ResponseEntity<TeacherResource> getTeacherById(@PathVariable Long id);
 
     @GetMapping("/teachers/user/{id}")
-    ResponseEntity<TeacherResource> getTeacherByUserId(@PathVariable Long id);
+    ResponseEntity<Map<String, TeacherResource>> getTeacherByUserId(@PathVariable Long id);
 
     @GetMapping("/medical-centers/{id}")
     ResponseEntity<MedicalCenterResource> getMedicalCenterById(@PathVariable Long id);
