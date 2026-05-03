@@ -48,7 +48,7 @@ public class AttendanceCommandServiceImpl implements AttendanceCommandService {
 
             Long attendanceId = attendanceRepository.save(attendance).getId();
 
-            //blockchainService.recordAttendance(attendanceId, command.teacherId(), command.studentId(), command.latitude(), command.longitude());
+            blockchainService.recordAttendance(attendanceId, command.teacherId(), command.studentId(), command.latitude(), command.longitude());
 
             return attendanceId;
         } catch (FeignException.NotFound e) {
