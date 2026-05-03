@@ -24,7 +24,7 @@ public class AttendanceCommandServiceImpl implements AttendanceCommandService {
     public final UserClient userClient;
     public final EvaluationClient evaluationClient;
 
-    double HOSPITAL_ALLOWED_RADIUS_METERS = 100.0;
+    double HOSPITAL_ALLOWED_RADIUS_METERS = 200.0;
 
     public AttendanceCommandServiceImpl(AttendanceRepository attendanceRepository, BlockchainService blockchainService,
                                         UserClient userClient, EvaluationClient evaluationClient) {
