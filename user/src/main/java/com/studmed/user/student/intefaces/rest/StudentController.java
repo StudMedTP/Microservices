@@ -1,10 +1,8 @@
 package com.studmed.user.student.intefaces.rest;
 
 import com.studmed.user.shared.exception.BadRequestException;
-import com.studmed.user.shared.security.UserDetailsImpl;
 import com.studmed.user.student.domain.model.aggregates.Student;
 import com.studmed.user.student.domain.model.commands.CreateStudentCommand;
-import com.studmed.user.student.domain.model.queries.GetAllStudentsByTeacherIdQuery;
 import com.studmed.user.student.domain.model.queries.GetStudentByIdQuery;
 import com.studmed.user.student.domain.model.queries.GetStudentByUserIdQuery;
 import com.studmed.user.student.domain.service.StudentCommandService;
@@ -17,10 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
