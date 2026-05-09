@@ -95,6 +95,22 @@ public class ClassroomStudentQueryServiceImpl implements ClassroomStudentQuerySe
             }
 
             classroomRepository.findById(classroomStudent.getClassroom().getId()).ifPresent(classroomStudent::setClassroom);
+
+            try {
+                MedicalCenterResource medicalCenterResource = userClient.getMedicalCenterById(classroomStudent.getClassroom().getMedicalCenterId()).getBody();
+                classroomStudent.getClassroom().setMedicalCenter(medicalCenterResource);
+            } catch (Exception e) {
+                MedicalCenterResource medicalCenterResource = MedicalCenterResource.builder().build();
+                classroomStudent.getClassroom().setMedicalCenter(medicalCenterResource);
+            }
+
+            try {
+                TeacherResource teacherResource = userClient.getTeacherById(classroomStudent.getClassroom().getTeacherId()).getBody();
+                classroomStudent.getClassroom().setTeacher(teacherResource);
+            } catch (Exception e) {
+                TeacherResource teacherResource = TeacherResource.builder().build();
+                classroomStudent.getClassroom().setTeacher(teacherResource);
+            }
         });
         return classroomStudents;
     }
