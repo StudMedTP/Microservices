@@ -1,7 +1,9 @@
 package com.studmed.evaluation.classroomstudent.application.internal.queryservice;
 
 import com.studmed.evaluation.classroom.client.UserClient;
+import com.studmed.evaluation.classroom.domain.model.client.MedicalCenterResource;
 import com.studmed.evaluation.classroom.domain.model.client.StudentResource;
+import com.studmed.evaluation.classroom.domain.model.client.TeacherResource;
 import com.studmed.evaluation.classroom.infraestructure.persistance.jpa.repositories.ClassroomRepository;
 import com.studmed.evaluation.classroomstudent.domain.model.aggregate.ClassroomStudent;
 import com.studmed.evaluation.classroomstudent.domain.model.queries.GetAllClassroomStudentByClassIdQuery;
@@ -51,6 +53,21 @@ public class ClassroomStudentQueryServiceImpl implements ClassroomStudentQuerySe
                 List<ClassroomStudent> classroomStudents = classroomStudentRepository.findAllByStudentId(studentMapResource.get("student").getId());
 
                 classroomStudents.forEach((classroomStudent) -> {
+                    try {
+                        TeacherResource teacherResource = userClient.getTeacherById(classroomStudent.getClassroom().getTeacherId()).getBody();
+                        classroomStudent.getClassroom().setTeacher(teacherResource);
+                    } catch (Exception e) {
+                        TeacherResource teacherResource = TeacherResource.builder().build();
+                        classroomStudent.getClassroom().setTeacher(teacherResource);
+                    }
+
+                    try {
+                        MedicalCenterResource medicalCenterResource = userClient.getMedicalCenterById(classroomStudent.getClassroom().getMedicalCenterId()).getBody();
+                        classroomStudent.getClassroom().setMedicalCenter(medicalCenterResource);
+                    } catch (Exception e) {
+                        MedicalCenterResource medicalCenterResource = MedicalCenterResource.builder().build();
+                        classroomStudent.getClassroom().setMedicalCenter(medicalCenterResource);
+                    }
                     classroomStudent.setStudent(studentMapResource.get("student"));
                 });
                 return classroomStudents;

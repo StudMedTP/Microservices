@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TeacherResource {
+public class UserResource {
     private Long id;
-    private String teacherCode;
-    private UserResource userResource;
+    private String firstName;
+    private String lastName;
 }

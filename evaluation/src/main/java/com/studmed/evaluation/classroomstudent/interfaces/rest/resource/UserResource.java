@@ -1,7 +1,7 @@
 package com.studmed.evaluation.classroomstudent.interfaces.rest.resource;
 
-public record StudentResource(
+public record UserResource(
         Long id,
-        String studentCode,
-        UserResource userResource
+        String firstName,
+        String lastName
 ) {}

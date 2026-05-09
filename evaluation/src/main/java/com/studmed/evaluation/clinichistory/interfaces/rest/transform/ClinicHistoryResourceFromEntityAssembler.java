@@ -1,6 +1,7 @@
 package com.studmed.evaluation.clinichistory.interfaces.rest.transform;
 
 import com.studmed.evaluation.classroomstudent.interfaces.rest.resource.StudentResource;
+import com.studmed.evaluation.classroomstudent.interfaces.rest.resource.UserResource;
 import com.studmed.evaluation.clinichistory.domain.model.aggregate.ClinicHistory;
 import com.studmed.evaluation.clinichistory.interfaces.rest.resource.ClinicHistoryResource;
 import com.studmed.evaluation.clinichistory.interfaces.rest.resource.ClinicHistoryResourcePlain;
@@ -18,7 +19,12 @@ public class ClinicHistoryResourceFromEntityAssembler {
                 entity.getStudentId(),
                 new StudentResource(
                         entity.getStudent().getId(),
-                        entity.getStudent().getStudentCode()
+                        entity.getStudent().getStudentCode(),
+                        new UserResource(
+                                entity.getStudent().getUserResource().getId(),
+                                entity.getStudent().getUserResource().getFirstName(),
+                                entity.getStudent().getUserResource().getLastName()
+                        )
                 )
         );
     }

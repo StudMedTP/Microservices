@@ -5,6 +5,7 @@ import com.studmed.evaluation.classroom.interfaces.rest.resource.ClassroomResour
 import com.studmed.evaluation.classroom.interfaces.rest.resource.ClassroomResourcePlain;
 import com.studmed.evaluation.classroom.interfaces.rest.resource.MedicalCenterResource;
 import com.studmed.evaluation.classroom.interfaces.rest.resource.TeacherResource;
+import com.studmed.evaluation.classroomstudent.interfaces.rest.resource.UserResource;
 
 public class ClassroomResourceFromEntityAssembler {
     public static ClassroomResource toResourceFromEntity(Classroom entity) {
@@ -21,7 +22,12 @@ public class ClassroomResourceFromEntityAssembler {
                 ),
                 new TeacherResource(
                         entity.getTeacher().getId(),
-                        entity.getTeacher().getTeacherCode()
+                        entity.getTeacher().getTeacherCode(),
+                        new UserResource(
+                                entity.getTeacher().getUserResource().getId(),
+                                entity.getTeacher().getUserResource().getFirstName(),
+                                entity.getTeacher().getUserResource().getLastName()
+                        )
                 ),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt());
