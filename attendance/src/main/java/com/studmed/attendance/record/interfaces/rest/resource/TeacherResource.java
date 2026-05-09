@@ -2,5 +2,6 @@ package com.studmed.attendance.record.interfaces.rest.resource;
 
 public record TeacherResource(
         Long id,
-        String teacherCode
+        String teacherCode,
+        UserResource userResource
 ) {}

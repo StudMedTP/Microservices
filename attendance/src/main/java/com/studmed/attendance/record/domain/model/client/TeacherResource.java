@@ -8,5 +8,6 @@ import lombok.Data;
 public class TeacherResource {
     private Long id;
     private String teacherCode;
+    private UserResource userResource;
     private MedicalCenterResource medicalCenterResource;
 }

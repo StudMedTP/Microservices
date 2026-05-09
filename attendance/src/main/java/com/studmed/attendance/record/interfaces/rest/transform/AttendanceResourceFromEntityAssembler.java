@@ -1,10 +1,7 @@
 package com.studmed.attendance.record.interfaces.rest.transform;
 
 import com.studmed.attendance.record.domain.model.aggregates.Attendance;
-import com.studmed.attendance.record.interfaces.rest.resource.AttendanceResource;
-import com.studmed.attendance.record.interfaces.rest.resource.AttendanceResourcePlain;
-import com.studmed.attendance.record.interfaces.rest.resource.StudentResource;
-import com.studmed.attendance.record.interfaces.rest.resource.TeacherResource;
+import com.studmed.attendance.record.interfaces.rest.resource.*;
 
 public class AttendanceResourceFromEntityAssembler {
     public static AttendanceResource toResourceFromEntity(Attendance entity) {
@@ -18,7 +15,12 @@ public class AttendanceResourceFromEntityAssembler {
                 ),
                 new TeacherResource(
                         entity.getTeacher().getId(),
-                        entity.getTeacher().getTeacherCode()
+                        entity.getTeacher().getTeacherCode(),
+                        new UserResource(
+                                entity.getTeacher().getUserResource().getId(),
+                                entity.getTeacher().getUserResource().getFirstName(),
+                                entity.getTeacher().getUserResource().getLastName()
+                        )
                 ),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
