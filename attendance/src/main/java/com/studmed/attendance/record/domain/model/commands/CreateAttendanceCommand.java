@@ -4,4 +4,5 @@ public record CreateAttendanceCommand(Long studentId,
                                       Long teacherId,
                                       Long classroomId,
                                       Double latitude,
-                                      Double longitude) {}
+                                      Double longitude,
+                                      Boolean isPartial) {}

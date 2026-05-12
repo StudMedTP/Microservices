@@ -22,4 +22,6 @@ public record CreateAttendanceResource(
         @NotNull
         @DecimalMin(value = "-180.0")
         @DecimalMax(value = "180.0")
-        Double longitude) {}
+        Double longitude,
+        @NotNull
+        Boolean isPartial) {}

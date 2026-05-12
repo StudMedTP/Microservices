@@ -25,7 +25,8 @@ public class AttendanceResourceFromEntityAssembler {
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
                 entity.getLatitude(),
-                entity.getLongitude());
+                entity.getLongitude(),
+                entity.getIsPartial());
     }
 
     public static AttendanceResourcePlain toResourcePlainFromEntity(Attendance entity) {
@@ -36,6 +37,7 @@ public class AttendanceResourceFromEntityAssembler {
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
                 entity.getLatitude(),
-                entity.getLongitude());
+                entity.getLongitude(),
+                entity.getIsPartial());
     }
 }

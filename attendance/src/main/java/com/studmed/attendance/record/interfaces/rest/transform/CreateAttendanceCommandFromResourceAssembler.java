@@ -10,6 +10,7 @@ public class CreateAttendanceCommandFromResourceAssembler {
                 resource.teacherId(),
                 resource.classroomId(),
                 resource.latitude(),
-                resource.longitude());
+                resource.longitude(),
+                resource.isPartial());
     }
 }

@@ -8,4 +8,5 @@ public record AttendanceResourcePlain(Long id,
                                       Date createdAt,
                                       Date updatedAt,
                                       Double latitude,
-                                      Double longitude) {}
+                                      Double longitude,
+                                      Boolean isPartial) {}

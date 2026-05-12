@@ -53,6 +53,9 @@ public class Attendance {
     @UpdateTimestamp
     private Date updatedAt;
 
+    @Column(name = "is_partial")
+    private Boolean isPartial;
+
     public Attendance(CreateAttendanceCommand command){
         this();
         this.studentId = command.studentId();
@@ -60,5 +63,6 @@ public class Attendance {
         this.classroomId = command.classroomId();
         this.latitude = command.latitude();
         this.longitude = command.longitude();
+        this.isPartial = command.isPartial();
     }
 }
