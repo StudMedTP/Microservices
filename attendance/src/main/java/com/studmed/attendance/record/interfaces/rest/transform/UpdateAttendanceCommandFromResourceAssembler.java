@@ -7,6 +7,6 @@ public class UpdateAttendanceCommandFromResourceAssembler {
     public static UpdateAttendanceCommand toCommandFromResource(Long id, UpdateAttendanceResource resource){
         return new UpdateAttendanceCommand(
                 id,
-                resource.status());
+                resource.isPartial());
     }
 }

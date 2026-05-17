@@ -106,6 +106,8 @@ public class AttendanceCommandServiceImpl implements AttendanceCommandService {
 
         Attendance attendance = attendanceOptional.get();
 
+        attendance.setIsPartial(command.isPartial());
+
         return attendanceRepository.save(attendance).getId();
     }
 
