@@ -35,7 +35,7 @@ public class GradeController {
 
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("Grade Microservice is up and running! 1.0");
+        return ResponseEntity.ok("Grade Microservice is up and running! 2.0");
     }
 
     @PostMapping
