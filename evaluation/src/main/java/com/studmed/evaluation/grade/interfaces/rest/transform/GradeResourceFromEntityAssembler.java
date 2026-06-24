@@ -11,6 +11,7 @@ public class GradeResourceFromEntityAssembler {
                 entity.getId(),
                 entity.getValue(),
                 entity.getDescription(),
+                entity.getCreatedAt(),
                 new ClassroomStudentResourcePlain(
                         entity.getClassroomStudent().getId(),
                         entity.getClassroomStudent().getClassroom().getId(),
@@ -22,6 +23,7 @@ public class GradeResourceFromEntityAssembler {
         return new GradeResourcePlain(
                 entity.getId(),
                 entity.getValue(),
-                entity.getDescription());
+                entity.getDescription(),
+                entity.getCreatedAt());
     }
 }

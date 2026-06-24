@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "Grade")
@@ -23,6 +26,10 @@ public class Grade {
     private Long value;
 
     private String description;
+
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private Date createdAt;
 
     @ManyToOne
     @JoinColumn(name = "classroom_student_id")
